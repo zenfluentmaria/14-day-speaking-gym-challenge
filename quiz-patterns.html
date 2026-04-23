@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pattern Interrupt Quiz — IBS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --plum:#1E1B2E;--terra:#C8593A;--purple:#7C6BC4;--parchment:#FAF6F1;
+  --lavender:#D7C4F0;--peach:#F5CBA7;--mint:#ADE8D4;--sky:#A8D4F5;
+  --butter:#F5ECA8;--rose:#D4A0C0;--mid:#9B8EC4;--bg:#F7F2E8;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--plum);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
+.container{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:48px 24px 80px;}
+
+.quiz-header{text-align:center;margin-bottom:48px;}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--terra);margin-bottom:16px;}
+.quiz-header h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:600;line-height:1.25;color:var(--plum);margin-bottom:14px;}
+.quiz-header h1 em{font-style:italic;color:var(--terra);}
+.quiz-header p{font-size:15px;color:#555;line-height:1.7;max-width:520px;margin:0 auto;}
+
+.intro-note{background:white;border-radius:14px;padding:20px 24px;margin-bottom:40px;border-left:3px solid var(--terra);}
+.intro-note p{font-size:14px;line-height:1.65;color:#444;}
+.intro-note strong{color:var(--plum);}
+
+.progress-wrap{margin-bottom:36px;}
+.progress-bar{height:3px;background:#E8E0D4;border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--terra);border-radius:2px;transition:width 0.4s ease;}
+.progress-label{font-size:12px;color:var(--mid);margin-top:8px;text-align:right;}
+
+.scenario-card{background:white;border-radius:20px;overflow:hidden;margin-bottom:20px;box-shadow:0 2px 20px rgba(0,0,0,0.06);animation:fadeUp 0.35s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+
+.scenario-header{background:var(--plum);padding:20px 28px;}
+.scenario-tag{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--peach);margin-bottom:8px;}
+.scenario-text{font-family:'Playfair Display',serif;font-size:17px;color:white;line-height:1.5;}
+
+.scenario-body{padding:28px;}
+.scenario-prompt{font-size:14px;color:#555;line-height:1.6;margin-bottom:20px;font-style:italic;}
+
+.behaviors{display:grid;gap:8px;}
+.behavior-btn{background:var(--bg);border:2px solid transparent;border-radius:10px;padding:14px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.5;color:var(--plum);text-align:left;transition:all 0.2s;display:flex;gap:10px;align-items:flex-start;}
+.behavior-btn:hover{border-color:var(--purple);background:white;}
+.behavior-btn.selected{border-color:var(--terra);background:#FFF5F2;}
+.bh-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--mid);flex-shrink:0;margin-top:2px;transition:all 0.2s;}
+.behavior-btn.selected .bh-dot{background:var(--terra);border-color:var(--terra);}
+
+.btn-next{width:100%;padding:15px;background:var(--plum);color:white;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:12px;transition:all 0.2s;}
+.btn-next:hover{background:var(--terra);}
+.btn-next:disabled{opacity:0.3;cursor:not-allowed;}
+
+/* RESULTS */
+.results{display:none;}
+
+.results-hero{background:var(--plum);border-radius:24px;padding:44px 40px;text-align:center;margin-bottom:24px;position:relative;overflow:hidden;}
+.results-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,0.03);}
+.results-hero .eyebrow{color:var(--peach);margin-bottom:12px;}
+.results-hero h2{font-family:'Playfair Display',serif;font-size:30px;color:white;margin-bottom:8px;}
+.results-hero p{font-size:15px;color:rgba(255,255,255,0.65);max-width:460px;margin:0 auto;}
+
+.pattern-primary{background:white;border-radius:20px;padding:36px;margin-bottom:20px;}
+.pattern-primary h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--plum);margin-bottom:6px;}
+.pattern-primary .pattern-sub{font-size:13px;color:var(--mid);margin-bottom:20px;}
+.pattern-primary p{font-size:14px;line-height:1.75;color:#444;margin-bottom:16px;}
+.pattern-primary p:last-child{margin-bottom:0;}
+
+.interrupt-box{background:linear-gradient(135deg,var(--lavender),#EDE4FF);border-radius:14px;padding:24px;margin:20px 0;}
+.interrupt-box h4{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:12px;}
+.interrupt-item{display:flex;gap:12px;margin-bottom:10px;align-items:flex-start;}
+.interrupt-item:last-child{margin-bottom:0;}
+.interrupt-arrow{font-size:14px;color:var(--purple);margin-top:2px;flex-shrink:0;}
+.interrupt-text{font-size:13px;line-height:1.5;color:var(--plum);}
+
+.all-patterns{background:white;border-radius:20px;padding:32px;margin-bottom:20px;}
+.all-patterns h3{font-family:'Playfair Display',serif;font-size:16px;color:var(--plum);margin-bottom:20px;}
+.pattern-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #F5F5F5;}
+.pattern-row:last-child{border-bottom:none;}
+.pattern-name{font-size:13px;color:var(--plum);font-weight:500;}
+.pattern-pct{font-size:13px;color:var(--mid);}
+.pattern-mini-bar{height:4px;background:#EEE;border-radius:2px;margin-top:4px;overflow:hidden;}
+.pattern-mini-fill{height:100%;border-radius:2px;}
+
+.btn-new{width:100%;padding:14px;background:transparent;color:var(--plum);border:2px solid var(--plum);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;transition:all 0.2s;margin-top:8px;}
+.btn-new:hover{background:var(--plum);color:white;}
+
+@media(max-width:600px){
+  .scenario-header{padding:16px 20px;}
+  .scenario-body{padding:20px;}
+  .results-hero{padding:32px 24px;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="quiz-header">
+    <div class="eyebrow">Identity Based Speaking</div>
+    <h1>What Do You Do<br>Instead of <em>Speaking</em>?</h1>
+    <p>This quiz identifies your primary escape behaviors — the things your nervous system does to avoid full presence when the stakes are high. 10 scenarios. Pick the answer that's most honest, not most flattering.</p>
+  </div>
+
+  <div class="intro-note">
+    <p><strong>How to use this:</strong> Read each scenario and pick the behavior that sounds most like what you actually do — not what you wish you did. These are patterns, not flaws. The goal is to name them precisely enough to interrupt them.</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">Scenario 1 of 10</div>
+  </div>
+
+  <div id="quizArea">
+    <div class="scenario-card" id="scenCard">
+      <div class="scenario-header">
+        <div class="scenario-tag" id="scenTag"></div>
+        <div class="scenario-text" id="scenText"></div>
+      </div>
+      <div class="scenario-body">
+        <p class="scenario-prompt" id="scenPrompt"></p>
+        <div class="behaviors" id="behaviorsArea"></div>
+        <button class="btn-next" id="btnNext" onclick="nextQ()" disabled>Next scenario →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="results" id="results"></div>
+
+</div>
+
+<script>
+const scenarios = [
+  {
+    tag:"In a meeting",
+    text:"You're asked to give your opinion on a strategic decision. You haven't been given time to prepare. Everyone looks at you.",
+    prompt:"What do you most likely do in the first 5 seconds?",
+    behaviors:[
+      {text:"You start talking immediately — saying something, anything — to show you have a view, even before you're sure what your view actually is.",pat:"rushing"},
+      {text:"You say 'That's a great point' and restate what someone else just said, framing it slightly as your own perspective.",pat:"deflecting"},
+      {text:"You say 'I'd need to look at the data before I could say for sure' — even when your gut already has a clear answer.",pat:"deferring"},
+      {text:"Your voice comes out quieter than you intended, and your sentence ends as if it's a question.",pat:"shrinking"},
+    ]
+  },
+  {
+    tag:"After speaking",
+    text:"You've just finished explaining something in a team meeting. There's a 3-second silence after you speak.",
+    prompt:"What does your brain do with those 3 seconds?",
+    behaviors:[
+      {text:"You immediately add more — 'I mean, what I'm trying to say is…' — breaking the silence before it can mean anything.",pat:"rushing"},
+      {text:"You say 'Does that make sense?' — handing the evaluation of your words back to the room.",pat:"shrinking"},
+      {text:"You scan everyone's faces to figure out if you said the right thing, and adjust your confidence based on what you see.",pat:"performing"},
+      {text:"You mentally re-draft the whole answer and wish you could say it again with different words.",pat:"deferring"},
+    ]
+  },
+  {
+    tag:"Being challenged",
+    text:"A colleague disagrees with your recommendation in front of others. Their tone is confident. Their point has some validity — but yours does too.",
+    prompt:"What do you do?",
+    behaviors:[
+      {text:"You concede faster than you'd like — 'You're right, actually, that's a good point' — even though you're not fully convinced.",pat:"shrinking"},
+      {text:"You defend your point immediately and with more force than the situation requires, because backing down feels like losing.",pat:"rushing"},
+      {text:"You mentally evaluate whether the room is on their side, and adjust your position based on that read.",pat:"performing"},
+      {text:"You say 'I'll think about that' and go quiet — planning to address it later in a follow-up email where you feel safer.",pat:"deferring"},
+    ]
+  },
+  {
+    tag:"Preparing to speak",
+    text:"You have a presentation to a senior team in two days. You know your content well.",
+    prompt:"What does your preparation actually look like?",
+    behaviors:[
+      {text:"You over-prepare the content and under-prepare the delivery — you know every detail but haven't spoken it aloud once.",pat:"deferring"},
+      {text:"You rehearse so many times that the version you deliver sounds robotic, and the real you disappears.",pat:"performing"},
+      {text:"You avoid practicing because practicing makes the fear feel more real — so you wing it and tell yourself you work better that way.",pat:"rushing"},
+      {text:"You prepare, but spend most of the time imagining what could go wrong rather than building what will go right.",pat:"shrinking"},
+    ]
+  },
+  {
+    tag:"Receiving feedback",
+    text:"After a presentation, your manager says 'That was good, but you could have been more concise.'",
+    prompt:"How do you process that internally?",
+    behaviors:[
+      {text:"You replay the presentation in detail, identify every moment you over-explained, and feel quietly mortified.",pat:"deferring"},
+      {text:"You feel defensive — you think they missed the point, or the format required the detail, or there wasn't enough time.",pat:"rushing"},
+      {text:"You over-apologize in the moment — 'I know, I always do that, I'm working on it' — even though they said it was good.",pat:"shrinking"},
+      {text:"You file the feedback and perform confidence — 'Thanks, noted' — while feeling more unsure inside than you show.",pat:"performing"},
+    ]
+  },
+  {
+    tag:"In a 1-on-1",
+    text:"You're in a 1-on-1 with your manager and they ask: 'How do you think you've been performing lately?'",
+    prompt:"What comes out first?",
+    behaviors:[
+      {text:"You undersell — 'I think it's been okay, there are definitely areas I could improve…' even if you've genuinely done strong work.",pat:"shrinking"},
+      {text:"You give a confident, structured answer — but you've rehearsed this moment so many times it doesn't quite sound like you.",pat:"performing"},
+      {text:"You start with what went well, then spiral into qualifications and caveats that undo the positive framing.",pat:"rushing"},
+      {text:"You say 'I'd be interested to hear your view first' — deflecting the self-assessment back to them.",pat:"deferring"},
+    ]
+  },
+  {
+    tag:"Being put on the spot",
+    text:"Someone in a meeting says 'Actually — [your name], what do you think about this?' You weren't following closely.",
+    prompt:"What happens next?",
+    behaviors:[
+      {text:"You ask them to repeat the question and buy yourself thinking time — then give a carefully worded non-answer.",pat:"deferring"},
+      {text:"You give an answer that's coherent but vague — it sounds like a perspective but doesn't actually commit to anything.",pat:"performing"},
+      {text:"Your face tells the truth before your words do — and you know it.",pat:"shrinking"},
+      {text:"You speak for longer than necessary trying to get to a point — and land somewhere slightly different from where you intended.",pat:"rushing"},
+    ]
+  },
+  {
+    tag:"At the end of speaking",
+    text:"You've made your point. You've said what you came to say. There's a natural moment to stop.",
+    prompt:"What do you actually do?",
+    behaviors:[
+      {text:"You trail off — your voice drops, the sentence doesn't quite close, and the ending sounds like a question.",pat:"shrinking"},
+      {text:"You add one more thing. Then one more. Just to make sure the point really landed.",pat:"rushing"},
+      {text:"You end with 'So… yeah' or 'I think that's it' — undermining everything you said before it.",pat:"performing"},
+      {text:"You end cleanly in your head but then immediately wonder if you should have added more.",pat:"deferring"},
+    ]
+  },
+  {
+    tag:"Networking",
+    text:"You're at a professional event. Someone impressive — a potential connection — walks up and introduces themselves.",
+    prompt:"What do you do in the first 30 seconds?",
+    behaviors:[
+      {text:"You over-explain your role, your background, your company — giving them a CV they didn't ask for.",pat:"rushing"},
+      {text:"You mirror their energy and talk about them, deflecting most questions about yourself with another question.",pat:"deflecting"},
+      {text:"You give a polished, practiced version of yourself that feels accurate but not quite real.",pat:"performing"},
+      {text:"You feel the gap between who you are and what's coming out of your mouth — and go quiet faster than you wanted to.",pat:"shrinking"},
+    ]
+  },
+  {
+    tag:"Sending a message after speaking",
+    text:"You had a conversation today where you felt you didn't say what you really meant. It's been two hours.",
+    prompt:"What are you doing right now?",
+    behaviors:[
+      {text:"You've already sent a follow-up message 'just to clarify' — even though they probably understood you the first time.",pat:"rushing"},
+      {text:"You're still replaying it, identifying the exact sentence where it went wrong, and composing the better version in your head.",pat:"deferring"},
+      {text:"You've moved on externally but something is quietly bothering you that you can't quite name.",pat:"performing"},
+      {text:"You've decided it probably didn't matter — while also checking your phone to see if they've said anything.",pat:"shrinking"},
+    ]
+  }
+];
+
+const patterns = {
+  rushing:{
+    name:"The Rusher",
+    color:"#E8845C",
+    desc:"Your nervous system moves faster than your message. Under pressure, you speak to manage anxiety rather than to communicate — filling silence before it can carry meaning, adding detail before the point has landed, defending before fully listening. The rush feels like participation. To others, it can feel like noise.",
+    interrupts:[
+      "Pause for 2 full seconds before responding to any question in a meeting. Two seconds feels like forever. That's the point.",
+      "Say your core message first — then decide if the rest needs to be said. Most of the time, it doesn't.",
+      "When you feel the urge to add something after finishing a thought, practice saying nothing instead. Notice what happens.",
+    ]
+  },
+  shrinking:{
+    name:"The Shrinker",
+    color:"#D4A0C0",
+    desc:"You make yourself smaller before anyone asks you to. Your voice drops at the ends of sentences. Your statements arrive as questions. You apologize for taking up space before you've taken it. This isn't timidity — it's a protection strategy your nervous system learned somewhere. The problem is that it's still running the show in situations where you no longer need protecting.",
+    interrupts:[
+      "Finish every sentence at the same volume it started. Don't let your voice drop at the end.",
+      "Remove 'Does that make sense?' from your vocabulary for 14 days. Replace it with silence.",
+      "Before entering any high-stakes conversation, state your role out loud to yourself: 'I am the [role] in this room and my perspective belongs here.'",
+    ]
+  },
+  deferring:{
+    name:"The Deferrer",
+    color:"#9B8EC4",
+    desc:"You delay the moment of full exposure by buying time — with questions, with 'I need to check on that,' with the follow-up email instead of the live answer. The deferral feels like precision. And sometimes it is. But often it's the nervous system choosing the conditions of a conversation that feel safer over the conditions that are actually in front of you.",
+    interrupts:[
+      "When your instinct is to say 'let me get back to you,' give a 70% answer right now instead. Then follow up with the rest.",
+      "In the next meeting, answer the first question you're asked within 5 seconds of hearing it — no recalibration.",
+      "Practice the Rapid Interview Rounds with your partner specifically to break the pattern of needing ready conditions before speaking.",
+    ]
+  },
+  performing:{
+    name:"The Performer",
+    color:"#7C6BC4",
+    desc:"You've learned to look confident without being present. The polished version of you shows up — and they're good. They say the right things, use the right tone, manage the impression skillfully. But there's a gap between that performance and the actual person doing it, and you feel it even when no one else does. The performing feels like safety. What it costs you is genuine authority — the kind that only comes from being fully there.",
+    interrupts:[
+      "In one conversation today, say something you haven't rehearsed. Let the unpolished version speak.",
+      "Notice when your face or tone is communicating something different from what you actually feel. Name the gap — even just to yourself.",
+      "Let one answer be imperfect and unfinished. Don't paper over it. See what happens.",
+    ]
+  },
+  deflecting:{
+    name:"The Deflector",
+    color:"#ADE8D4",
+    desc:"You redirect attention away from yourself with skill — asking the other person a question, reframing their question as a bigger topic, restating someone else's idea as input. This can look like humility or curiosity. But underneath it is a pattern of making sure the conversation doesn't land on you for too long. You control exposure by controlling direction.",
+    interrupts:[
+      "Answer the question before asking one back. Full answer, then redirect if you want to.",
+      "When someone asks about you, resist the first impulse to turn it into a question about them. Stay in your own answer for 30 more seconds.",
+      "In your next introduction, say three things about yourself without mentioning anyone else.",
+    ]
+  }
+};
+
+let scores={rushing:0,shrinking:0,deferring:0,performing:0,deflecting:0};
+let current=0;
+let sel=null;
+
+function render(){
+  if(current>=scenarios.length){showResults();return;}
+  const s=scenarios[current];
+  document.getElementById('scenTag').textContent=s.tag;
+  document.getElementById('scenText').textContent=s.text;
+  document.getElementById('scenPrompt').textContent=s.prompt;
+  const area=document.getElementById('behaviorsArea');
+  area.innerHTML='';
+  s.behaviors.forEach((b,i)=>{
+    const btn=document.createElement('button');
+    btn.className='behavior-btn';
+    btn.innerHTML=`<span class="bh-dot"></span><span>${b.text}</span>`;
+    btn.onclick=()=>select(btn,b.pat);
+    area.appendChild(btn);
+  });
+  document.getElementById('btnNext').disabled=true;
+  sel=null;
+  const pct=current/scenarios.length*100;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressLabel').textContent=`Scenario ${current+1} of ${scenarios.length}`;
+  document.getElementById('scenCard').style.animation='none';
+  void document.getElementById('scenCard').offsetWidth;
+  document.getElementById('scenCard').style.animation='';
+}
+
+function select(btn,pat){
+  document.querySelectorAll('.behavior-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  sel=pat;
+  document.getElementById('btnNext').disabled=false;
+}
+
+function nextQ(){
+  if(!sel)return;
+  scores[sel]++;
+  current++;
+  render();
+}
+
+function showResults(){
+  document.getElementById('quizArea').style.display='none';
+  document.getElementById('progressFill').style.width='100%';
+  document.getElementById('progressLabel').textContent='Complete';
+
+  const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  const top=sorted[0][0];
+  const p=patterns[top];
+  const total=scenarios.length;
+
+  const allRows=sorted.map(([k,v])=>`
+    <div class="pattern-row">
+      <div>
+        <div class="pattern-name">${patterns[k].name}</div>
+        <div class="pattern-mini-bar"><div class="pattern-mini-fill" style="width:${v/total*100}%;background:${patterns[k].color};"></div></div>
+      </div>
+      <div class="pattern-pct">${Math.round(v/total*100)}%</div>
+    </div>
+  `).join('');
+
+  const interrupts=p.interrupts.map(i=>`
+    <div class="interrupt-item">
+      <span class="interrupt-arrow">→</span>
+      <span class="interrupt-text">${i}</span>
+    </div>
+  `).join('');
+
+  const res=document.getElementById('results');
+  res.style.display='block';
+  res.innerHTML=`
+    <div class="results-hero">
+      <div class="eyebrow">Your Primary Escape Behavior</div>
+      <h2>${p.name}</h2>
+      <p>This is the pattern your nervous system runs when the stakes feel high and full presence feels risky.</p>
+    </div>
+    <div class="pattern-primary">
+      <h3>${p.name}</h3>
+      <div class="pattern-sub">Your most frequent escape behavior across the 10 scenarios</div>
+      <p>${p.desc}</p>
+      <div class="interrupt-box">
+        <h4>Three ways to interrupt this pattern starting today</h4>
+        ${interrupts}
+      </div>
+    </div>
+    <div class="all-patterns">
+      <h3>Your full pattern breakdown</h3>
+      ${allRows}
+    </div>
+    <p style="font-size:13px;color:#888;text-align:center;margin-bottom:16px;">Most people have a primary and a secondary pattern. Look at your top two — both are worth interrupting.</p>
+    <button class="btn-new" onclick="retake()">↺ Retake the quiz</button>
+  `;
+}
+
+function retake(){
+  scores={rushing:0,shrinking:0,deferring:0,performing:0,deflecting:0};
+  current=0;sel=null;
+  document.getElementById('quizArea').style.display='block';
+  document.getElementById('results').style.display='none';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
