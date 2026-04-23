@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 14-Day Unmuted Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --plum:#1E1B2E;--terra:#C8593A;--purple:#7C6BC4;--parchment:#FAF6F1;
+  --lavender:#D7C4F0;--peach:#F5CBA7;--mint:#ADE8D4;--sky:#A8D4F5;
+  --butter:#F5ECA8;--rose:#D4A0C0;--mid:#9B8EC4;--bg:#F7F2E8;--white:#fff;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--plum);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
+
+.wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:56px 24px 100px;}
+
+/* HEADER */
+.page-hero{text-align:center;margin-bottom:64px;}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--terra);margin-bottom:16px;}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:44px;font-weight:600;line-height:1.15;color:var(--plum);margin-bottom:16px;}
+.page-hero h1 em{font-style:italic;color:var(--terra);}
+.page-hero p{font-size:16px;color:#555;line-height:1.7;max-width:560px;margin:0 auto 32px;}
+
+/* HOW IT WORKS */
+.how{background:var(--plum);border-radius:24px;padding:44px;margin-bottom:56px;}
+.how h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--peach);margin-bottom:28px;}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
+.step{background:rgba(255,255,255,0.06);border-radius:14px;padding:20px 16px;}
+.step-n{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--peach);margin-bottom:10px;}
+.step p{font-size:13px;line-height:1.55;color:rgba(255,255,255,0.8);}
+
+/* QUIZ LINKS */
+.quiz-links{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:56px;}
+.quiz-links.inline-quiz{grid-template-columns:1fr;margin-bottom:0;}
+.quiz-card{background:white;border-radius:18px;padding:28px;text-decoration:none;display:flex;flex-direction:column;gap:10px;transition:all 0.2s;border:2px solid transparent;}
+.quiz-card:hover{border-color:var(--terra);box-shadow:0 6px 24px rgba(0,0,0,0.08);}
+.quiz-card-tag{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--terra);}
+.quiz-card h3{font-family:'Playfair Display',serif;font-size:18px;color:var(--plum);}
+.quiz-card p{font-size:13px;line-height:1.55;color:#666;}
+.quiz-card .quiz-arrow{font-size:13px;font-weight:500;color:var(--terra);margin-top:4px;}
+
+/* TABS */
+.tabs{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap;}
+.tab{padding:11px 22px;border-radius:40px;border:2px solid #DDD;background:white;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;color:var(--plum);transition:all 0.2s;}
+.tab:hover{border-color:var(--mid);}
+.tab.active{background:var(--plum);color:white;border-color:var(--plum);}
+
+/* PANEL */
+.panel{display:none;}
+.panel.active{display:block;}
+
+.cat-head{border-radius:20px 20px 0 0;padding:36px 44px 32px;}
+.cat-m .cat-head{background:linear-gradient(135deg,#E8DFFF,var(--lavender));}
+.cat-p .cat-head{background:linear-gradient(135deg,#FFE8DE,var(--peach));}
+.cat-g .cat-head{background:linear-gradient(135deg,#D4F5EC,var(--mint));}
+.cat-b .cat-head{background:linear-gradient(135deg,#FFF8D4,var(--butter));}
+.cat-head h2{font-family:'Playfair Display',serif;font-size:28px;color:var(--plum);margin-bottom:8px;}
+.cat-head p{font-size:14px;line-height:1.65;color:#333;max-width:600px;}
+
+.cat-body{background:var(--parchment);border-radius:0 0 20px 20px;padding:40px 44px;margin-bottom:32px;}
+
+/* WEEK */
+.wk-eyebrow{font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--mid);margin-bottom:10px;margin-top:36px;}
+.wk-eyebrow:first-child{margin-top:0;}
+.wk-title{font-family:'Playfair Display',serif;font-size:19px;color:var(--plum);margin-bottom:24px;}
+
+/* DAY CARDS */
+.day{background:white;border-radius:16px;margin-bottom:10px;overflow:hidden;}
+.day-top{display:flex;align-items:flex-start;gap:14px;padding:20px 24px;cursor:pointer;transition:background 0.15s;}
+.day-top:hover{background:#FAFAFA;}
+.day-num{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);min-width:52px;padding-top:3px;}
+.day-title{font-size:15px;font-weight:500;color:var(--plum);flex:1;line-height:1.45;}
+.day-icon{font-size:18px;color:var(--mid);transition:transform 0.2s;min-width:20px;}
+.day.open .day-icon{transform:rotate(45deg);}
+
+.cat-m .day{border-left:3px solid var(--lavender);}
+.cat-p .day{border-left:3px solid var(--peach);}
+.cat-g .day{border-left:3px solid var(--mint);}
+.cat-b .day{border-left:3px solid var(--butter);}
+
+/* DAY BODY */
+.day-body{display:none;padding:0 24px 24px;}
+.day.open .day-body{display:block;}
+
+.setup{font-size:14px;line-height:1.7;color:#333;margin-bottom:16px;}
+.setup strong{color:var(--plum);}
+
+.task-box{background:var(--bg);border-radius:12px;padding:20px;margin-bottom:14px;}
+.task-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--terra);margin-bottom:10px;}
+.task-steps{list-style:none;}
+.task-steps li{font-size:14px;line-height:1.65;color:var(--plum);padding:6px 0;padding-left:18px;position:relative;}
+.task-steps li::before{content:'→';position:absolute;left:0;color:var(--terra);font-size:12px;}
+
+/* POST NOTE */
+.post-note{background:var(--plum);border-radius:12px;padding:18px 20px;margin-top:14px;}
+.post-note-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--peach);margin-bottom:8px;}
+.post-note-text{font-size:13px;color:rgba(255,255,255,0.75);margin-bottom:10px;line-height:1.6;}
+.post-note-cues{list-style:none;padding:0;margin:0;}
+.post-note-cues li{font-size:13px;line-height:1.6;color:rgba(255,255,255,0.9);padding:4px 0 4px 16px;position:relative;}
+.post-note-cues li::before{content:'→';position:absolute;left:0;color:var(--peach);font-size:11px;top:5px;}
+.prompt-text span{font-style:normal;font-weight:500;color:var(--terra);}
+
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:20px;}
+.bv{background:#FFE8E0;color:var(--terra);}
+.bp{background:var(--lavender);color:var(--plum);}
+.bl{background:var(--mint);color:#1A3A2E;}
+.bq{background:var(--butter);color:#3A3000;}
+.bc{background:#FFE0F0;color:#6A003A;}
+
+/* PARTNER SESSIONS */
+.partner-sessions{background:var(--plum);border-radius:18px;padding:32px 36px;margin-bottom:32px;}
+.partner-sessions h3{font-family:'Playfair Display',serif;font-size:18px;color:var(--peach);margin-bottom:20px;}
+.sess-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.sess{background:rgba(255,255,255,0.07);border-radius:12px;padding:20px;}
+.sess h4{font-size:12px;font-weight:600;color:var(--peach);margin-bottom:10px;letter-spacing:0.5px;}
+.sess p{font-size:13px;line-height:1.6;color:rgba(255,255,255,0.8);}
+
+@media(max-width:680px){
+  .steps{grid-template-columns:1fr 1fr;}
+  .quiz-links{grid-template-columns:1fr;}
+  .sess-grid{grid-template-columns:1fr;}
+  .cat-head,.cat-body{padding:24px 20px;}
+  .page-hero h1{font-size:32px;}
+  .how{padding:28px 20px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="page-hero">
+    <div class="eyebrow">Unmuted Community Challenge</div>
+    <h1>14 Days.<br>One Category. <em>Real Work.</em></h1>
+    <p>Choose the track that matches where you're stuck. Find a partner. Do the work on video — with specific topics, real pressure, and prompts that make you say something true.</p>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step"><div class="step-n">Step 01</div><p>Choose your category below. All four run at the same time.</p></div>
+      <div class="step"><div class="step-n">Step 02</div><p>Post in the Accountability tab with a 30-sec intro video to find your partner.</p></div>
+      <div class="step"><div class="step-n">Step 03</div><p>Do each day's task. Your video IS your post — use the prompt as your script. Tag your partner. You can also rate the difficulty or share what surprised you.</p></div>
+      <div class="step"><div class="step-n">Step 04</div><p>Meet live with your partner twice — Day 7 and Day 13. Debrief on a given prompt.</p></div>
+      <div class="step"><div class="step-n">Step 05</div><p>Day 14: post your transformation video to the main community feed.</p></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('m',this)">🧠 Mindset & Identity</button>
+    <button class="tab" onclick="switchTab('p',this)">⚡ Performance Under Pressure</button>
+    <button class="tab" onclick="switchTab('g',this)">🗣 Grammar in Speech</button>
+    <button class="tab" onclick="switchTab('b',this)">💼 Business English</button>
+  </div>
+
+
+  <!-- ===================== MINDSET ===================== -->
+  <div id="panel-m" class="panel cat-m active">
+    <div class="cat-head">
+      <h2>🧠 Mindset & Identity</h2>
+      <p>Built entirely from the IBS methodology. This track is about catching the pattern that runs your speaking under pressure, naming it precisely, and building a new one — not through positive thinking, but through behavioral interruption and identity-level work. Start with the Speaking Characters Quiz before Day 1.</p>
+    </div>
+    <div class="cat-body">
+
+      <div class="wk-eyebrow">Week 1 — Catch the Pattern</div>
+      <div class="wk-title">Days 1–7: You can't interrupt what you haven't named</div>
+
+      <!-- Day 1 -->
+      <div class="day" onclick="tog(this)">
+        <div class="day-top">
+          <span class="day-num">Day 1</span>
+          <span class="day-title">Take the Speaking Characters Quiz and name your character out loud</span>
+          <span class="day-icon">+</span>
+        </div>
+        <div class="day-body">
+          <p class="setup">Before you record anything today, take the <strong>Speaking Characters Quiz</strong> below. Read your full result — don't skim it. The quiz gives you a character name, a description of your pattern, and the specific conditions that trigger it. Your job today is to record a video responding to what you just read — not summarizing it, but reacting to it. Did it land? Did something feel uncomfortably accurate? Was there a line that made you want to argue? That's the video.</p>
+          <div class="quiz-links inline-quiz" style="margin-bottom:16px;">
+            <a class="quiz-card" href="quiz-characters.html" target="_blank">
+              <div class="quiz-card-tag">IBS Tool — Take Before You Record</div>
+              <h3>The Speaking Characters Quiz</h3>
+              <p>Find out who you become under professional pressure — The Overcorrector, The Hidden One, The Perfectionist in Pause, or The Blurred One.</p>
+              <div class="quiz-arrow">Take the quiz →</div>
+            </a>
+          </div>
+          <div class="task-box">
+            <div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Take the Speaking Characters Quiz. Read your full result without skipping.</li>
+              <li>Record a 2-minute video responding to your result. Say your character name out loud and describe one real moment from your professional life where that character showed up — a specific meeting, a specific conversation, a specific moment you remember.</li>
+              <li>Don't perform. Don't be polished. The more honest this video is, the more useful the next 13 days will be.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Your Speaking Character name + the line from the description that hit hardest</li>
+              <li>One real moment at work where that character showed up — specific situation, not a category</li>
+              <li>Something this made you see that you'd never put into words before</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bq">Quiz Required</span></div>
+        </div>
+      </div>
+
+      <!-- Day 2 -->
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 2</span><span class="day-title">Map the exact triggers — when does your character take over?</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Your character doesn't show up everywhere. It activates in specific conditions — when specific people are present, when specific things are at stake, when the situation has a particular shape. Today you're mapping those conditions with precision. "I get nervous in meetings" is not specific enough. "I lose my structure when someone more senior than me enters the room mid-conversation" is specific enough to work with.</p>
+          <div class="task-box">
+            <div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Think of 3 real professional situations where your pattern activates most strongly. Be specific — not "presentations" but "presenting to someone I don't know who has decision-making power over my project."</li>
+              <li>Record yourself describing each one — 60 seconds each. What is the room like? Who is there? What is being asked of you? What does your body do first?</li>
+              <li>After all three, record a 30-second close: what do these three situations have in common?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Your 3 trigger situations — name them specifically</li>
+              <li>What they all have in common</li>
+              <li>What your body does first when the pattern kicks in</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <!-- Day 3 -->
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 3</span><span class="day-title">The identity gap — who you are vs. who shows up</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Today is about the gap between the self-concept you carry and the self that activates under pressure. Most people have an identity statement they'd give in a calm moment — "I'm someone who communicates clearly" — and a very different behavioral reality that shows up in the room. This exercise makes that gap visible so you can start choosing which one to bring.</p>
+          <div class="task-box">
+            <div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Record yourself completing this sentence 5 times, each time differently: "I am someone who…" — describe who you are as a professional in a calm, low-stakes setting.</li>
+              <li>Then complete this sentence 5 times: "When I'm in [your top trigger situation], I am someone who…" — describe who you actually become.</li>
+              <li>Record a 90-second honest reflection on the gap between the two sets. Don't soften it. The gap is the diagnosis.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>One calm-state 'I am someone who…' statement vs. the honest pressure-state version</li>
+              <li>The gap you're most uncomfortable naming out loud</li>
+              <li>What you think created it</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <!-- Day 4 -->
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 4</span><span class="day-title">Find the version of you that speaks without fear</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">This character exists. You've been them before — in your native language, with close friends, explaining something you know deeply to someone who trusts you. That version isn't a fantasy. It's the baseline. Today you're going to locate it and describe it in enough detail that you can use it as a reference point for the rest of the challenge.</p>
+          <div class="task-box">
+            <div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Think of one specific moment when you spoke with full confidence — no self-monitoring, no shrinking, no pattern. It doesn't have to be professional. It can be explaining something you love, telling a story, teaching someone something.</li>
+              <li>Record yourself describing that moment in detail: the context, who was there, what you were saying, and what it felt like to speak that way.</li>
+              <li>Then answer this on video: What did that version of you believe about yourself that made speaking feel different? Say it in one sentence.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The moment you spoke without fear — describe it briefly</li>
+              <li>What that version of you believed about yourself</li>
+              <li>What you want to bring from that version into your hardest professional context</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <!-- Day 5 -->
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 5</span><span class="day-title">Take the Pattern Interrupt Quiz and name your escape behavior</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Take the <strong>Pattern Interrupt Quiz</strong> below. This quiz shows you what your nervous system does instead of speaking fully — whether you rush, shrink, defer, perform, or deflect. The quiz gives you the name of your primary escape behavior and three specific interrupts. Your job today is to record your reaction to the result — and name one real professional situation where you can see this behavior has been running without you realizing it.</p>
+          <div class="quiz-links inline-quiz" style="margin-bottom:16px;">
+            <a class="quiz-card" href="quiz-patterns.html" target="_blank">
+              <div class="quiz-card-tag">IBS Tool — Take Before You Record</div>
+              <h3>The Pattern Interrupt Quiz</h3>
+              <p>Identify your primary escape behavior — what your nervous system does instead of speaking fully. 10 real scenarios. Choose the answer that's honest, not flattering.</p>
+              <div class="quiz-arrow">Take the quiz →</div>
+            </a>
+          </div>
+          <div class="task-box">
+            <div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Take the Pattern Interrupt Quiz. Read your result in full — especially the three interrupt strategies at the end.</li>
+              <li>Record a 2-minute video naming your primary escape behavior and one real example of when you've used it — a specific situation you remember, not a general category.</li>
+              <li>Read one of your three interrupt strategies out loud. Then say: "The reason this will be hard for me specifically is [honest reason]."</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Your primary escape behavior — name it</li>
+              <li>A real situation where it was running — specific, not general</li>
+              <li>The interrupt you're committing to starting today</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bq">Quiz Required</span></div>
+        </div>
+      </div>
+
+      <!-- Day 6 -->
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 6</span><span class="day-title">Check your state before one real conversation today</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">In IBS, state is the condition your nervous system is in before you open your mouth. Most people walk into high-stakes conversations without checking their state at all — and then wonder why their language fell apart, or why they couldn't access what they prepared. Today you're introducing a 60-second state check as a real practice, not a concept.</p>
+          <div class="task-box">
+            <div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Before one real professional conversation or meeting today — a 1-on-1, a team meeting, a client call — pause for 60 seconds beforehand. Record this pause on video (you don't need to say anything in it — just capture yourself stopping before you enter).</li>
+              <li>Ask yourself out loud on camera: "What state am I in right now? What does my body feel? What is my mind doing?" Answer honestly.</li>
+              <li>After the conversation, record a 90-second debrief: what state were you in, what happened, and whether your state going in affected your speaking.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>What state you were in before the conversation — describe it honestly</li>
+              <li>What happened in the conversation</li>
+              <li>The connection you can see between your state going in and how you spoke</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <!-- Day 7 -->
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 7</span><span class="day-title">Week 1 reckoning — what are you now unwilling to keep doing?</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">This is your end-of-week video and your live partner session day. Week 1 was about seeing — seeing your character, your triggers, your gap, your escape behavior, and your state. What you've been doing this week is the uncomfortable part: most people never look at this directly. Record the honest version of what you saw.</p>
+          <div class="task-box">
+            <div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Record a 3-minute unscripted video. No notes, no outline. Just you speaking about what you've seen this week — what landed, what you're still resisting, and the one thing you now know you can't keep doing.</li>
+              <li>Share this video with your partner before your live session today.</li>
+              <li>In your live session: each person has 10 minutes to walk the other through their week — what they saw, what surprised them, what they're committing to in Week 2. The partner listens without interrupting, then gives 3 minutes of honest reflection.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The most uncomfortable thing you saw about yourself this week — be specific</li>
+              <li>The behavior you're officially done with — name it precisely</li>
+              <li>Your single behavioral commitment going into Week 2</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Live Partner Session</span></div>
+        </div>
+      </div>
+
+      <div class="wk-eyebrow">Week 2 — Choose a New Behavior</div>
+      <div class="wk-title">Days 8–14: Interrupting the pattern in real conditions</div>
+
+      <!-- Days 8-14 condensed but specific -->
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 8</span><span class="day-title">Write your new identity statement and say it 10 times on video</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Your new identity statement is not an affirmation. It's a behavioral claim — specific, grounded in your actual trigger situation, and built around who you're choosing to be rather than who you've been. "I am confident" is too vague and too abstract to interrupt anything. "I am someone who finishes every sentence in a board meeting even when I feel the room shift" is something you can actually hold onto in the moment.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Write your identity statement in this format: "I am someone who [specific behavior] even when [your specific trigger situation]."</li>
+              <li>Record yourself saying it 10 times in a row without stopping. Don't change it. Don't soften it. Say it exactly as written, 10 times.</li>
+              <li>After the 10th repetition, record 60 seconds of honest reaction: where did your body resist? At which repetition did something start to shift?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Your new identity statement — write it out exactly</li>
+              <li>The repetition where something started to shift, and what changed</li>
+              <li>Whether you believe it yet — honest answer required</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 9</span><span class="day-title">Go into your #1 trigger situation with your new identity as the anchor</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Today you take your identity statement into a real professional situation — not a role-play, not a practice round. You pick the situation that corresponds most closely to your top trigger from Day 2, and you walk into it having said your statement out loud in the 60 seconds before. The goal is not perfection. The goal is to see what happens when you enter with intention instead of reaction.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Identify today's real trigger situation (a meeting, a call, a conversation). 60 seconds before, say your identity statement out loud to yourself. Record that 60-second pre-entry moment on video.</li>
+              <li>After the situation, record an immediate debrief — while it's still in your body, before you've had time to rationalize. What happened? What held? What pulled you back?</li>
+              <li>Be specific. Not "it went okay" — but what specific moment did the pattern try to activate, and what did you do in that moment?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>What happened in the real trigger situation</li>
+              <li>Whether the new identity held, partly held, or collapsed — and what triggered the shift</li>
+              <li>The moment the old pattern tried to come back</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 10</span><span class="day-title">Speak directly to your pattern on video — claim authority over it</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">This task sounds unusual. Do it anyway. You're going to record yourself speaking directly to the pattern — as if it were a distinct entity that has been running your speaking without your full permission. This is not therapy. It's an identity act: you are establishing, on record and out loud, that you are the one making the choices now.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Record a 2-minute video addressed directly to your pattern. Use "you" — speak to it. Thank it for what it protected you from (be honest — it probably did protect something at some point). Tell it what conditions have changed. Tell it what you're choosing instead.</li>
+              <li>End with one clear sentence that is not an apology, not a softener, and not a question. End with a statement of what you're doing from here.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Week 1 vs Week 2 Rapid Rounds — what changed in how your body handled the pressure</li>
+              <li>What's still the same</li>
+              <li>The answer that surprised you most — good or difficult</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 11</span><span class="day-title">Regulate your state before every speaking moment today</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Today you do a state regulation practice before every professional speaking moment — not just one, every one. The practice is simple: 60 seconds before entering any meeting, call, or significant conversation, you stop, check your state, say your identity statement, and enter with intention. The goal is to make this feel less like a technique and more like a default behavior.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Before every speaking moment today — however many there are — do the 60-second regulation practice. Count how many you do.</li>
+              <li>Record yourself doing the practice once on video so your partner can see what it looks like for you.</li>
+              <li>At the end of the day, record a 90-second debrief: how many times did you regulate, what happened when you did, and what happened in the one moment where you forgot and went in unanchored.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The conversation you'd been avoiding — describe it without identifying details</li>
+              <li>What you actually said vs. what you planned</li>
+              <li>What the Pre-Frame changed about how the conversation opened</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 12</span><span class="day-title">Teach your partner your pattern — become the expert on yourself</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">When you can explain your own pattern clearly enough for someone else to recognize it, you've moved from being inside it to being above it. Today you and your partner exchange that kind of explanation — not venting, not summarizing the quizzes, but actually teaching each other what your pattern looks and sounds like from the outside.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Record a 3-minute video explaining your pattern to your partner — as if they need to understand it well enough to notice it when it happens. What triggers it, what it looks like from the outside, what it sounds like in your voice, and what you've been changing.</li>
+              <li>Then watch your partner's video. Record a 90-second response: one thing you noticed about their pattern that they might not have named, and one thing they did in that video that showed the new version of themselves already showing up.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Day 2 vs Day 12 — specific differences in voice, structure, and ending</li>
+              <li>What physical pressure still does to your speaking</li>
+              <li>Your partner's one key observation</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Partner Exchange</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 13</span><span class="day-title">Identity stress test — your hardest context, live pressure, partner watching</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">This is the test. You recreate your #1 trigger situation — the one you named on Day 2 — on video. You can see yourself on camera. The clock is running (90 seconds). Your partner is watching the recording afterward and will give you specific feedback. You go in as your new identity. You don't get a redo. One take.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Set up your camera, set a visible 90-second timer, and recreate your #1 trigger situation as a speaking task. (Example: if your trigger is being asked to explain your role to a senior leader you don't know, record yourself doing exactly that — introduce yourself and explain your work to an unknown senior leader, 90 seconds, no script.)</li>
+              <li>Send the video to your partner. They give you specific feedback: one thing that held from Week 1, and one thing that is still being run by the old pattern.</li>
+              <li>Record a debrief: what held, what collapsed, and what the gap between your identity statement and your actual delivery still is.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>When the interruption hit and what you did</li>
+              <li>The tool that saved you</li>
+              <li>The gap you're still carrying into Day 14 — name it honestly</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Live Partner Session</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 14</span><span class="day-title">The transformation video — who are you now as a speaker?</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">This is your community post. Not a summary of the tasks. Not a list of what you learned. A real video of you speaking — as who you are now — about what these 14 days did. Post it alongside your Day 1 video so the community can see the before and after.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Record a 3-minute unscripted video. Speak about what you saw, what you interrupted, what you chose differently, and who you are now as a speaker compared to Day 1. This video IS your transformation — the way you speak in it is the evidence.</li>
+              <li>Post both this video and your Day 1 video to the main community feed.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>What pressure used to do to your speaking vs. what it does now — be specific</li>
+              <li>The one behavior you interrupted across 14 days</li>
+              <li>What you're still working on — this is a milestone, not a graduation</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bl">🌍 Community Post</span></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="partner-sessions">
+      <h3>🤝 Two Live Partner Sessions</h3>
+      <div class="sess-grid">
+        <div class="sess"><h4>Session 1 — Day 7</h4><p>30–45 min. Share your Day 7 reflection video before the call. On the call: each person has 10 minutes to walk the other through what they saw this week — no interrupting. Partner then gives 3 minutes of honest reflection. Close with: "What did you NOT say in your videos that you're saying now?"</p></div>
+        <div class="sess"><h4>Session 2 — Day 13</h4><p>30–45 min. Watch each other's identity stress test videos live. Give real-time specific feedback — not encouragement, observation. "The moment the old pattern came back was when…" and "The moment I saw the new version was when…" Close by saying your Day 14 commitment out loud to each other.</p></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===================== PERFORMANCE ===================== -->
+  <div id="panel-p" class="panel cat-p">
+    <div class="cat-head">
+      <h2>⚡ Performance Under Pressure</h2>
+      <p>Five real tools from the IBS methodology: CEO Framework, CEO + Marching, Inbox Method, Predict the Scenario, Rapid Interview Rounds, and the Pre-Frame Framework. Week 1 introduces each tool with a specific topic. Week 2 applies them to real professional situations.</p>
+    </div>
+    <div class="cat-body">
+
+      <div class="wk-eyebrow">Week 1 — Learn the Tools</div>
+      <div class="wk-title">Days 1–7: One tool, one topic, full pressure</div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 1</span><span class="day-title">CEO Framework — "What does your team actually do?"</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">The CEO Framework is: <strong>C</strong>ore message (one sentence — what you want them to leave with) → <strong>E</strong>xplain with one thing (one example, one data point, one story — not three) → <strong>O</strong>wn the ending (a clear close that doesn't trail off into "so… yeah"). Today's topic sounds simple. It isn't. Most people explain their team's work in a rambling, context-heavy way that makes the other person work too hard to understand. Your job today is to make it effortless for the listener.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Set a visible 90-second countdown clock in your recording. This is non-negotiable — the clock creates the pressure.</li>
+              <li>Use CEO to answer: "What does your team actually do, and why does it matter to the business?" Core message first. One explanation. Own the ending.</li>
+              <li>Record it once. No re-recording. The first take is the most honest version of where you are.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Your core message — write the exact sentence you opened with</li>
+              <li>Your ending — did you own it cleanly or trail off?</li>
+              <li>What the 90-second clock did to you physically</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video + Clock</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 2</span><span class="day-title">CEO + Marching — "What's the most important project you're working on right now?"</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">CEO + Marching adds physical activation to the structure — you march in place while you speak, which puts your nervous system into a state closer to what you experience in real high-stakes moments. The pressure on your voice, your clarity, and your ability to maintain structure tells you exactly what breaks first when your body is activated. That's the data. Today's topic is one you know well — and knowing it well is not enough when the body is running a stress response.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Stand up. Start marching in place before you press record. Keep marching throughout the entire answer.</li>
+              <li>Use CEO to answer: "What's the most important project you're currently working on, and what's the challenge?" 90-second clock. Marching. No stopping if you stumble.</li>
+              <li>After, record a 60-second reflection: what broke first — your structure, your voice, your word choice, or your ending?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>What the marching changed about your speaking — specifically, not 'it was harder'</li>
+              <li>The first thing to break down under physical activation</li>
+              <li>What you now understand about what happens to your speaking when your body is activated</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video + Movement</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 3</span><span class="day-title">Inbox Method — "Can you update us on where the project stands?"</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">The Inbox Method is about sorting what you're going to say before you say it — the way you'd sort emails by priority. You decide what goes first (most important), what goes second (supporting context), and what doesn't get sent at all (the detail no one asked for). The trap with project updates is that most people start from the beginning of the timeline instead of from what matters most right now. Today you break that habit.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Think of a real project you could be asked to update someone on. Before recording, spend 2 minutes sorting: what is the most important thing right now? What context does that require? What can you cut entirely?</li>
+              <li>Record a 2-minute spoken update using that sorted structure — most important first, minimal context, clear close.</li>
+              <li>Then record a 60-second reflection: what did you cut that you would normally have included? Did cutting it make the answer weaker or stronger?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>What you cut that you would normally have included</li>
+              <li>What you led with instead of the beginning of the timeline</li>
+              <li>Whether cutting it made the answer weaker or stronger</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 4</span><span class="day-title">Predict the Scenario — the question that blanks you</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Predict the Scenario is about anticipating the hard moments before they happen so your nervous system is not surprised by them. Today you identify the one question at work that makes your brain go blank — the one you dread, the one that has caught you off guard before — and you answer it twice: once with 5 minutes of CEO prep, and once cold with no notes and no re-do.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Write down the question that blanks you most at work. (Examples: "What's your strategy for the next quarter?" / "Why did this not meet the target?" / "What do you think we should do differently?") Pick the real one, not a safe one.</li>
+              <li>Record Take 1: prepare for 5 minutes using CEO structure, then answer on camera.</li>
+              <li>Record Take 2 immediately after: no notes, no prep, just answer cold from where you are right now. 90-second clock. One take.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The question that blanks you — share it</li>
+              <li>With prep vs. cold: what was actually different</li>
+              <li>What preparation changes — not just the words, what else</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video ×2</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 5</span><span class="day-title">Rapid Interview Rounds — 3 questions, 1:30, no prep, partner sends them</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Rapid Interview Rounds train you to handle unfamiliar questions under time pressure without the luxury of preparation. Your partner sends you 3 questions right before you record — you see them for the first time when you hit play. You answer all 3 inside 90 seconds total. Then you send your partner 3 questions and they do the same. No re-recording. No previewing the questions in advance.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Coordinate with your partner: they send you 3 professional questions by message — you don't look at them until you're recording. Questions should be real, not trick questions. (Examples: "Tell me what you're most proud of at work this year." / "What's a decision you made recently that you'd make differently?" / "What does success look like for you in your role?")</li>
+              <li>Record your 3-question round in one uncut take. 90 seconds total. Clock visible.</li>
+              <li>Then send your partner 3 questions of your own and watch their recording. Give each other one piece of specific feedback.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The question that hit hardest and what your brain did in the first 3 seconds</li>
+              <li>What you defaulted to when time was almost up and you hadn't finished</li>
+              <li>Your partner's one specific piece of feedback</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Partner Sends Questions</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 6</span><span class="day-title">Pre-Frame Framework — "I'd like to share an update on [X] before we discuss anything else"</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">The Pre-Frame gives you control of a conversation before it can go in a direction you're not ready for. The structure is: <strong>Set the direction</strong> (tell them what this conversation is about before they set the terms) → <strong>Set the ending</strong> (tell them what you want to have decided or agreed by the end) → <strong>Ask for agreement</strong> ("Does that work for you?"). Then you move into CEO for the substance. Today's scenario: you need to share a project update that includes a problem, and you want to control how it's received.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Think of a real situation where you've had to share difficult news or a complex update — and either avoided it or went in without a frame and lost control of the conversation.</li>
+              <li>Record yourself delivering that situation using Pre-Frame + CEO. Set the direction, set the ending, ask for agreement — then deliver the update using CEO structure.</li>
+              <li>Record a 60-second reflection: what changed about how the message landed when you led with the frame?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Your direction-setter — the exact sentence you opened with</li>
+              <li>Your ending — what you said you wanted to land on</li>
+              <li>What leading with the frame changed about how the rest of the message felt to deliver</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 7</span><span class="day-title">Week 1 debrief — which tool exposed the most and why</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">You've now used all five tools under pressure. Today is your debrief and your first live partner session. The question isn't which tool was most useful in theory — it's which one exposed the gap between how you think you speak and how you actually speak. Be specific. "CEO was useful" is not a debrief. "When I had to own the ending I realized I never actually close a thought — I leave it open for the other person to complete" is a debrief.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Record a 2-minute unscripted debrief. Which tool was hardest and what specifically did it expose? Which one changed something in how you actually speak — not how you plan to speak?</li>
+              <li>Share with your partner before the live session. In the session, do a second round of Rapid Interview Rounds live — so each person answers 3 questions cold, in front of the other person, real-time.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The tool that exposed the most — and specifically what it showed you about how you actually speak</li>
+              <li>The tool that changed something in Week 1</li>
+              <li>Your Week 2 focus: which tool, which real context, what the plan is</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Live Partner Session</span></div>
+        </div>
+      </div>
+
+      <div class="wk-eyebrow">Week 2 — Apply to Real Life</div>
+      <div class="wk-title">Days 8–14: Real stakes, real tools, real debrief</div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 8</span><span class="day-title">Use CEO in a real meeting — debrief immediately after</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Today you bring the CEO Framework into a real professional conversation — not a rehearsal. You pick one moment in a meeting or call where you would normally give an unstructured, rambling answer, and you use CEO instead. The debrief happens immediately after the conversation, before you've had time to rationalise what happened.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Identify in advance the meeting where you'll use CEO — and which type of question or moment you'll apply it to (being asked for your opinion, giving an update, answering a challenge).</li>
+              <li>Immediately after the meeting, record a 90-second debrief while it's still in your body. What held? What collapsed? What did the structure do to the way your answer landed?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The real meeting context and when you used CEO</li>
+              <li>What held in real life</li>
+              <li>What fell apart and what triggered the breakdown</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Debrief Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 9</span><span class="day-title">Predict 3 hard moments in an upcoming real situation — then go in</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">You have a real meeting, presentation, or difficult conversation coming up in the next few days. Use Predict the Scenario to map the 3 most likely hard moments — not general anxieties, but specific moments where the conversation could go in a direction you're not ready for. Prepare a CEO response for each one and record yourself delivering all 3 cold before you go into the real thing.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Name the upcoming situation. Write down 3 specific hard moments you predict (a question you might be asked, a challenge, a moment of ambiguity).</li>
+              <li>Record yourself answering each one using CEO — cold, clock running, one take each.</li>
+              <li>After the real situation happens, come back and record a follow-up: how many of the 3 actually happened, and how did the preparation change your response?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Your 3 predicted hard moments</li>
+              <li>How many of them actually happened</li>
+              <li>What predicting in advance changed about how you showed up</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video + Follow-up</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 10</span><span class="day-title">Rapid Rounds — harder questions, same pressure</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Round 2 with your partner — but the questions are behavioral and harder. These are the questions that require you to be present and honest in real time, not just structured. Your partner sends them right before you record. Same rules: 90 seconds total, all 3 questions, one take, no preview.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Partner sends 3 behavioral questions. (Examples: "Tell me about a time you failed at something important." / "What's the most difficult professional feedback you've received?" / "Describe a decision you made that others disagreed with — and defend it.")</li>
+              <li>Record your round. 90 seconds. One take. Then watch Week 1's round back-to-back with this one.</li>
+              <li>Record a 60-second comparison: what has changed in how your body handles the pressure, not just in what you said?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Week 1 vs Week 2 Rapid Rounds — what changed in your body under pressure</li>
+              <li>What's still the same</li>
+              <li>The answer that surprised you most</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Partner Questions</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 11</span><span class="day-title">Pre-Frame a real ask you've been delaying</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">There is a real professional conversation you've been putting off — an ask, a boundary, a proposal, feedback you need to give. Today you use Pre-Frame + CEO to prepare it and then actually have the conversation. The debrief happens on video the same day.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Name the conversation you've been avoiding. Record yourself delivering the full Pre-Frame + CEO as a practice run — as if the person is in the room.</li>
+              <li>Then go have the actual conversation.</li>
+              <li>Record a debrief immediately after: what did you say vs. what you planned to say, and what the Pre-Frame changed about how the conversation opened.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The conversation you'd been avoiding — describe without identifying details</li>
+              <li>What you actually said vs. what you planned</li>
+              <li>How the Pre-Frame changed the way the conversation opened</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Practice + Debrief</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 12</span><span class="day-title">CEO + Marching — harder topic, longer clock, partner watching</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Return to CEO + Marching but with your most technically demanding professional topic — something you would normally need notes for, something complex — and a 2-minute clock instead of 90 seconds. Your partner watches the recording and gives you specific feedback. Post this video alongside your Day 2 video so the difference is visible.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Stand. March. 2-minute clock. Use CEO to answer: "Explain the most complex challenge in your work right now — and what you think the solution is." No script. Marching throughout.</li>
+              <li>Send to your partner. They give feedback on: structure clarity, ending ownership, and voice composure under movement.</li>
+              <li>Post Day 2 and Day 12 side by side.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Day 2 vs Day 12 — specific differences in voice, structure, ending</li>
+              <li>What physical pressure still does to your speaking</li>
+              <li>Your partner's feedback — one specific thing they said</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Partner Watches</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 13</span><span class="day-title">Full Stack — Pre-Frame + CEO + Rapid interruption, partner as stakeholder</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">This is the closest simulation to a real high-stakes professional moment you'll do in this challenge. Your partner plays a senior stakeholder. You run a full interaction: open with Pre-Frame, deliver an update using CEO, and handle at least one interruption from your partner mid-delivery. Your partner's job is to be realistic — not cruel, but not easy either.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>With your partner live (video call or in person): you deliver a 3-minute professional scenario — Pre-Frame to open, CEO for the substance, clean ending. Your partner plays a senior stakeholder and interrupts you at a natural moment to ask a follow-up or challenge a point.</li>
+              <li>Record the full interaction. Debrief immediately after — each person gets 3 minutes to reflect on what they observed.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>When the interruption hit and what happened</li>
+              <li>The tool that saved you</li>
+              <li>The gap you're still carrying into Day 14</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Live Partner Session</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 14</span><span class="day-title">The Before & After — what pressure does to you now vs. 14 days ago</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Post your Day 1 CEO clip and your Day 13 Full Stack clip side by side. Record a 2-minute honest assessment of what changed — not "I'm so much more confident" but "here is what specifically changed in my body, my structure, and my endings." The specificity is what makes this useful for the community watching.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Record your Day 14 transformation reflection. Compare specifically — voice, structure, ending, recovery from interruption.</li>
+              <li>Post Day 1 and Day 13 clips alongside your reflection to the main community feed.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>What pressure used to do vs. what it does now — specific</li>
+              <li>The one tool you'll use for the rest of your professional life and why</li>
+              <li>What you're still working on</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bl">🌍 Community Post</span></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="partner-sessions">
+      <h3>🤝 Two Live Partner Sessions</h3>
+      <div class="sess-grid">
+        <div class="sess"><h4>Session 1 — Day 7</h4><p>Do a live Rapid Interview Round together — each person answers 3 questions cold, in front of the other, in real time. Then debrief: what did you notice about each other's patterns under pressure that doesn't show up when you're watching a recording? Exchange one specific observation about composure, not just content.</p></div>
+        <div class="sess"><h4>Session 2 — Day 13</h4><p>Run the Full Stack roleplay live. The stakeholder should make it realistic — ask follow-ups, challenge a point, create a pause. After: one specific win and one specific gap per person. Not general ("you seemed more confident") but behavioral ("you owned your ending on the second answer but trailed off on the first").</p></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===================== GRAMMAR ===================== -->
+  <div id="panel-g" class="panel cat-g">
+    <div class="cat-head">
+      <h2>🗣 Grammar in Speech</h2>
+      <p>Not grammar for writing. These are the spoken structures that change how clear, confident, and easy to follow you sound in real conversations. Every task gives you an exact topic — your only job is to speak. Every day has a clock or pressure element.</p>
+    </div>
+    <div class="cat-body">
+
+      <div class="wk-eyebrow">Week 1 — The Structures That Matter Most</div>
+      <div class="wk-title">Days 1–7: One structure per day, one specific topic, no thinking required</div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 1</span><span class="day-title">Conditionals — "If I could redesign my morning, I would…"</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Second and third conditionals are the grammar of real reasoning — they let you explore what could be different and what you'd do about it. They sound thoughtful and considered when used naturally, but most non-native speakers avoid them under pressure and fall back to simpler sentences that flatten their ideas. Today's topic is something you know inside out — your own routine — so you can focus completely on the grammar.</p>
+          <div class="task-box">
+            <div class="task-label">How They Work + Examples</div>
+            <ul class="task-steps">
+              <li><strong>2nd conditional — imagining something different now or in the future:</strong> Structure: "If + past tense… would + verb." Examples: "If I could start my morning differently, I would build in an hour with no phone." / "If I went to bed earlier, I'd have so much more energy." / "If I worked from home, I'd probably be more focused."</li>
+              <li><strong>3rd conditional — reflecting on something that already happened:</strong> Structure: "If + past perfect… would have + verb." Examples: "If I had started this habit earlier, my mornings would have felt completely different." / "If I hadn't stayed up so late, I would have been more present." / "If someone had told me this years ago, I would have made different choices."</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li><strong>Your topic: "If you could redesign your morning routine, what would you change and why?"</strong></li>
+              <li>Record a 90-second answer using at least one 2nd conditional and one 3rd conditional — not as grammar examples, but as genuine thoughts about your actual mornings.</li>
+              <li>Record it twice: once after a 1-minute prep, once completely cold right after.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Your 2nd conditional sentence — write it out exactly as you said it</li>
+              <li>Your 3rd conditional sentence — write it out</li>
+              <li>What changes in how your reasoning sounds when you use these vs. simpler sentences</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video ×2</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 2</span><span class="day-title">Signposting — "I'll start with the context, then get to the main point"</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Signposting means telling your listener where you're going before you take them there. It makes you sound organized, in control, and easy to follow. Most non-native speakers jump straight into content — the listener has to work to keep up. Signposting hands them a map before the journey starts. Today's topic is something every person in this challenge has done: prepare for a job interview.</p>
+          <div class="task-box">
+            <div class="task-label">Phrases to Use — Memorize at Least 3</div>
+            <ul class="task-steps">
+              <li><strong>Opening signposts:</strong> "I'll cover two things — first X, then Y." / "Let me start with the practical side, then I'll get to the mindset part." / "There are three things I'd suggest — I'll go through each one briefly."</li>
+              <li><strong>Moving between points:</strong> "So that's X — now let me move to Y." / "The second thing I want to mention is…" / "Building on that…" / "That brings me to the main point, which is…"</li>
+              <li><strong>Closing signposts:</strong> "So to summarize…" / "The key takeaway here is…" / "To bring this back to the main question…"</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li><strong>Your topic: "Explain to someone who's never done it how to prepare for a job interview in your field."</strong></li>
+              <li>Record Version 1 without signposting — go straight into your advice as you naturally would. 60–90 seconds.</li>
+              <li>Record Version 2 using at least 3 signposting phrases: one to open, one to move between ideas, one to close. Same topic, same length.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Without signposting vs. with signposting — what was different for the listener</li>
+              <li>The phrase you'll actually use from now — write the exact sentence</li>
+              <li>What felt unnatural to say out loud and why</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video ×2</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 3</span><span class="day-title">Passive voice — "It was expected. It was never really explained."</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Passive voice is a tool, not a mistake — when you use it intentionally, it shifts the focus from who did something to what happened. It's the grammar of cultural norms, unspoken rules, and things that "just were." Today you're not practicing passive voice in a business context. You're using it to talk about something far more personal — the rules and traditions you grew up with — where it fits naturally and honestly.</p>
+          <div class="task-box">
+            <div class="task-label">How It Works + Examples</div>
+            <ul class="task-steps">
+              <li><strong>Structure:</strong> Instead of "My parents expected us to be home by dinner" (active), you say "It was expected that we'd be home by dinner" (passive — focuses on the norm, not the person). This works especially well for rules nobody chose — they just existed.</li>
+              <li><strong>Ready-to-use phrases:</strong> "It was expected that…" / "We were told that…" / "It was never really questioned." / "It had always been done that way." / "Children were expected to…" / "It was considered [normal/rude/important] to…" / "Nobody was allowed to…" / "It was understood, without anyone saying it, that…"</li>
+              <li><strong>When to flip back to active:</strong> When you want to show personal choice or resistance — "I broke that rule when I was 16" is stronger in active. Passive = the norm. Active = the individual.</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li><strong>Your topic: "Describe a rule at school, a family tradition, or a cultural norm you grew up with — how it was set, why it was followed, and whether it was ever questioned."</strong></li>
+              <li>Record a 90-second answer using passive voice at least three times — naturally, as part of your story, not as grammar examples.</li>
+              <li>Then record 60 seconds on: when did you follow this rule without thinking, and when (if ever) did you start to question it?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The rule or tradition you described — share one sentence from your answer</li>
+              <li>A passive voice sentence that felt natural coming out — write it out</li>
+              <li>What the difference is between "we did it this way" and "it was done this way" — why does it matter which one you say?</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 4</span><span class="day-title">Spoken logic — connecting your ideas so the listener doesn't have to</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Most spoken answers are a series of disconnected statements — accurate individually, but with no clear thread between them. The listener has to do the work of connecting them. Spoken linking language makes your thinking audible — the listener hears not just your points, but how you got from one to the next. Today's topic is something personal and specific: why you started learning English.</p>
+          <div class="task-box">
+            <div class="task-label">Phrases to Use — Pick Your Favorites</div>
+            <ul class="task-steps">
+              <li><strong>Showing cause:</strong> "What led to this was…" / "The reason this happened was…" / "This came about because…"</li>
+              <li><strong>Showing effect:</strong> "As a result of that…" / "Which then created a situation where…" / "That's what led to…" / "And the consequence of that was…"</li>
+              <li><strong>Moving the logic forward:</strong> "Building on that…" / "Which brings me to…" / "And that's connected to…"</li>
+              <li><strong>Landing the implication:</strong> "What that means now is…" / "So the upshot is…" / "Which is why I now…"</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li><strong>Your topic: "Why did you start learning English — what led to that decision, what happened as a result, and what it's meant for your life."</strong></li>
+              <li>Record a 2-minute answer using spoken linking throughout. Use at least 4 phrases from the list above. No listing. Connect everything — each sentence grows from the one before it.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The linking phrase you used most — write it out</li>
+              <li>What changed about your answer when you had to connect ideas instead of list them</li>
+              <li>The phrase that felt most natural coming out of your mouth</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 5</span><span class="day-title">Embedded questions — asking without losing your footing</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">One of the most common spoken grammar errors in English: "Can you tell me what is your job?" instead of "Can you tell me what your job is?" The word order flips when a question is embedded inside a polite phrase — and getting it wrong is audible. It marks you as still operating from a grammar pattern that doesn't match what you're trying to say. Today you practice embedded questions in a setting that feels natural: meeting someone interesting at a dinner party.</p>
+          <div class="task-box">
+            <div class="task-label">How They Work + Examples</div>
+            <ul class="task-steps">
+              <li><strong>The rule:</strong> Question order flips back to statement order when embedded. "What do you do?" becomes "I'd love to know what you do." "How did you get into this?" becomes "I'm curious how you got into this."</li>
+              <li><strong>Starter phrases:</strong> "I'd love to know…" / "I'm curious…" / "Could you tell me…" / "I'd be interested to hear…" / "Would you mind sharing…" / "I'm wondering whether…"</li>
+              <li><strong>Full examples:</strong> "I'd love to know what first drew you to this field." / "I'm curious how you made that transition." / "Could you tell me what the most surprising part of your work has been?" / "I'd be interested to hear whether you'd do it the same way again." / "I'm wondering whether you ever considered a completely different path."</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li><strong>Your topic: You're at a dinner party sitting next to someone successful in a field you're curious about. Ask them 6 questions using embedded form.</strong></li>
+              <li>Write your 6 questions first — direct question form — then convert each one into embedded form using the starter phrases above.</li>
+              <li>Record yourself asking all 6 naturally, as if the person is right there. 60-second clock. Then record 60 seconds on which ones still felt awkward and why.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>One embedded question you got wrong first — and the corrected version</li>
+              <li>The type that trips you most (with 'what,' 'whether,' 'how,' or 'why'?)</li>
+              <li>What getting this right changes about how you come across in conversation</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 6</span><span class="day-title">Tense accuracy — past, present, future in one answer</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">When an answer requires you to speak about the past, the present, and the future — all in one go — your tenses need to shift accurately and quickly. Under pressure, this is where many non-native speakers slip: past tense bleeds into present, or the future gets expressed as present simple. Today's topic gives you all three time zones in a natural, personal way — you've lived this answer, so all your energy can go into the grammar.</p>
+          <div class="task-box">
+            <div class="task-label">How to Structure a Past → Present → Future Answer</div>
+            <ul class="task-steps">
+              <li><strong>Talking about the past:</strong> Past simple for completed events. "I grew up in…" / "I decided to move when…" / "I started learning English because…"</li>
+              <li><strong>Talking about the present:</strong> Present continuous for what's happening now; present perfect for what connects past to now. "I'm currently working on…" / "I've been living here for…" / "Right now, I'm focused on…"</li>
+              <li><strong>Talking about the future:</strong> "will" for confident plans, "going to" for decided plans, "hoping to / planning to" for intentions. "I'll be moving to a new role next year." / "I'm going to stay here for at least another two years." / "I'm hoping to eventually work in…"</li>
+              <li><strong>Transition phrases:</strong> "So where I started was…" (past) → "Where I am now is…" (present) → "Where I want to go is…" (future).</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li><strong>Your topic: "Where did you grow up, what are you doing now, and where do you want to be in 5 years?"</strong></li>
+              <li>Your partner sends you this question. You have 10 seconds from seeing it to start speaking. 90-second clock. One take. Then listen back and note specifically where your tenses shifted incorrectly.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Where your tenses slipped — the specific moment, what you said vs. what you meant</li>
+              <li>What managing a timeline and grammar simultaneously does to your fluency</li>
+              <li>The tense form that's least automatic for you under pressure</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Partner Question</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 7</span><span class="day-title">Grammar audit — what patterns are showing up in your videos?</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Watch back your videos from Days 1–6. Your job today is not to judge yourself — it's to observe patterns. The structures that came naturally. The ones that kept breaking down. The ones you avoided without realizing. Then deliver that audit as a spoken video, not a written list. Your partner gives you one observation they noticed from watching your posts this week.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Watch Days 1–6 back. Take notes. Find 2 patterns that kept showing up — one you're proud of, one that needs work.</li>
+              <li>Record a 2-minute spoken audit — name both patterns, give a specific example of each from your own videos, and say what you're targeting in Week 2.</li>
+              <li>Your partner gives you one grammar observation they caught that you may have missed.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Your 2 recurring patterns — name them specifically, not just 'tenses'</li>
+              <li>The grammar habit you didn't know was affecting how you come across</li>
+              <li>Your partner's observation — what they caught that you missed</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Partner Observation</span></div>
+        </div>
+      </div>
+
+      <div class="wk-eyebrow">Week 2 — Apply Under Pressure</div>
+      <div class="wk-title">Days 8–14: Structures used when it actually counts</div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 8</span><span class="day-title">Rapid grammar round — structure called, topic given, you go cold</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Your partner calls a grammar structure and gives you a topic. You have 10 seconds to start speaking and must use that structure naturally in your answer. 5 rounds. This trains the gap between knowing a structure and being able to use it when you're not thinking about grammar at all — which is every real conversation you'll ever have.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Your partner uses these exact 5 combinations — in any order, revealed one at a time. You don't see them in advance.</li>
+              <li><strong>Round 1:</strong> Signposting + "Explain your favorite way to spend a Sunday."</li>
+              <li><strong>Round 2:</strong> 2nd conditional + "What would you do if you had 3 months off with no obligations?"</li>
+              <li><strong>Round 3:</strong> Passive voice + "Describe something that recently changed in your city or neighborhood."</li>
+              <li><strong>Round 4:</strong> Spoken logic + "Why did you start learning English?" (use a different angle than Day 4)</li>
+              <li><strong>Round 5:</strong> Embedded questions + "Ask your partner 3 things about their career path."</li>
+              <li>Record all 5 rounds in one take. Debrief immediately after: which structure is most automatic under pressure, which falls apart first.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The structure you nailed under pressure vs. the one that fell apart</li>
+              <li>What came out instead when the structure broke</li>
+              <li>What the 10-second start limit revealed that a slow practice exercise hides</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Partner-Led</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 9</span><span class="day-title">The misunderstanding — what you said, what they heard, what you wish you'd said</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Think of a moment when you felt genuinely misunderstood — in any language, in any setting. You said something. The other person heard something else. Maybe they responded in a way that showed they'd missed your meaning. Maybe you felt it in the room but couldn't fix it fast enough. Today you reconstruct that moment in English — not from notes, but from memory of a feeling — and use it to practice tenses, linking, and precision in a way that actually means something.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li><strong>Your topic: "Describe a moment when you felt misunderstood — what you said, what the other person heard, and what you wish you had said instead."</strong></li>
+              <li>Record a 2-minute answer. You need all three time zones in this: what happened (past), what you understand about it now (present), and the version you'd say if it happened again (conditional). Don't script it — speak from the memory.</li>
+              <li>Listen back and identify one sentence where your grammar didn't match what you meant. Record a 30-second correction of just that sentence.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>What you said vs. what you meant — write both out</li>
+              <li>The sentence you corrected — the original and the fixed version</li>
+              <li>What speaking from a real memory does to your fluency compared to speaking from a made-up scenario</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 10</span><span class="day-title">Grammar + Marching — does your structure hold when your body is activated?</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Pick the grammar structure that broke down most in Week 1. Today you apply it while marching in place — 90 seconds, clock visible. Physical activation puts your nervous system in a state closer to what you feel under real pressure. Notice what happens to your grammar specifically when your body is moving. This answers the question every speaker needs to ask: is this structure in my habit, or only in my head?</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li><strong>Your topic: "Your partner asks: 'Tell me about a trip you've taken — where you went, what it was like, and whether you'd go back.'"</strong></li>
+              <li>Stand up and start marching before you press record. Keep marching. Answer the question using your chosen Week 1 structure somewhere in the answer. 90-second clock.</li>
+              <li>Record a 60-second debrief: what fell apart first under movement — the content or the grammar — and what that tells you about where the structure actually lives.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Which structure you chose and what happened to it under movement</li>
+              <li>Whether it's in your habit or still just in your head</li>
+              <li>What marching revealed that recording alone didn't</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video + Movement</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 11</span><span class="day-title">Ban your filler — replace it with something real</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">You have a filler that shows up when you're processing — "basically," "like," "you know," "kind of," "so…," "I mean." Today you ban it completely across 3 answers and replace it with something real: a transition, a linking phrase, a deliberate pause. Removing the filler exposes where it was doing structural work that grammar should be doing instead. Today's questions are ones you'll want to answer — which makes the urge to fill space even stronger.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Name your filler out loud at the start of your video. Then answer all 3 questions below without using it once. Count internally how many times you feel the urge. Replace each urge with a linking word, a pause, or a transition.</li>
+              <li><strong>Question 1:</strong> "What's something you're proud of that you rarely talk about?"</li>
+              <li><strong>Question 2:</strong> "What's one opinion you have that most people you know would disagree with?"</li>
+              <li><strong>Question 3:</strong> "What's something you recently changed your mind about?"</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Your filler — and what you replaced it with most often</li>
+              <li>Which question made the urge hardest to resist and why</li>
+              <li>What removing the filler exposed about your sentence structure</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 12</span><span class="day-title">All three time zones, fully connected — no gaps, no jumps</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Your partner gives you a question that pulls past, present, and future out of you — all in one answer, fully linked. Today's topic is something personal and specific: a hobby or interest you've had. You know this one well, which means all your attention can go to the tenses, the linking, and the structure. 2 minutes. No pausing. No starting over.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li><strong>Your partner asks: "Tell me about a hobby or interest you've had — how it started, where it is for you now, and whether you see yourself doing it long-term."</strong></li>
+              <li>You answer all three — fully connected, under 2 minutes. Use linking language to move between time zones, not just "and then" or "after that."</li>
+              <li>Your partner notes: where did the tense structure hold? Where did the linking break? Where did a simpler structure replace a more precise one?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>What a familiar topic revealed when you had to speak about it in three connected time zones</li>
+              <li>The structure that held vs. the one that collapsed first</li>
+              <li>Your partner's one grammar observation</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Partner Question</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 13</span><span class="day-title">The interview — all structures, one conversation, on camera</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Your partner plays a journalist interviewing you about your work and your story. In the conversation, you need to use all the structures from this week naturally — embedded questions when you want to ask something back, conditionals when you're reflecting or imagining, linking language when you're explaining a chain of events, signposting when you're giving a longer answer. Not as a checklist. As real communication. Your partner notes which structures appeared and which got dropped.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li><strong>Your partner opens with: "I'm doing a piece on people who've built expertise in an area they're passionate about. Tell me — what do you do, how did you get here, and what does the future look like in your field?"</strong></li>
+              <li>Answer for 2 minutes. Your partner follows up with one question they genuinely want to know. You continue for another 60 seconds.</li>
+              <li>Debrief: which structures held under the pressure of a real back-and-forth, and which ones got sacrificed first.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The structure that held across the full conversation</li>
+              <li>The moment your grammar broke — name the specific sentence and what it should have been</li>
+              <li>What you're taking into Day 14</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Partner Interview</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 14</span><span class="day-title">Day 1 topic, Day 14 speaker — same question, different person</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Record yourself speaking on the exact same topic you used on Day 1. Post Day 1 and Day 14 side by side. Then record a 90-second spoken comparison — not "it sounds better" but what grammatical structures you now have access to automatically, which ones are still effort, and what 14 days of speaking out loud actually did.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li><strong>Re-record Day 1's topic: "If you could redesign your morning routine, what would you change and why?"</strong> Same setup, no notes, 90 seconds.</li>
+              <li>Record your spoken grammar comparison — be specific. Not "I sound more confident" but "I can now use [structure] automatically, where before I avoided it."</li>
+              <li>Post all three videos (Day 1, Day 14, and your comparison) to the community feed.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Day 1 vs Day 14 — specific structures you now have that you didn't before</li>
+              <li>The one that changed how you sound most to a professional listener and why</li>
+              <li>What you now understand about how grammar actually works under real pressure</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bl">🌍 Community Post</span></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="partner-sessions">
+      <h3>🤝 Two Live Partner Sessions</h3>
+      <div class="sess-grid">
+        <div class="sess"><h4>Session 1 — Day 7</h4><p>Rapid grammar rounds live: partner names a structure from Week 1 and gives a topic from the Day 8 list. You answer cold in 90 seconds. Then swap. Debrief: what structures did you hear the other person avoid under pressure? What do they use naturally that they don't even notice? One specific grammar win and one specific gap per person.</p></div>
+        <div class="sess"><h4>Session 2 — Day 13</h4><p>Run the journalist interview live. Partner plays the journalist and asks follow-up questions genuinely — not from a script. After: identify the moment each person's grammar broke down most noticeably — name the specific sentence, the structure that was missing, and what it would have sounded like if it had held.</p></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===================== BUSINESS ENGLISH ===================== -->
+  <div id="panel-b" class="panel cat-b">
+    <div class="cat-head">
+      <h2>💼 Business English in Action</h2>
+      <p>Not phrases and vocabulary lists. Real spoken professional situations — the ones that define how you're perceived, how much influence you carry, and whether people take you seriously. Every task involves speaking, a real context, and often research into how these situations are handled in professional English environments.</p>
+    </div>
+    <div class="cat-body">
+
+      <div class="wk-eyebrow">Week 1 — Core Professional Conversations</div>
+      <div class="wk-title">Days 1–7: The situations that define your professional presence</div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 1</span><span class="day-title">Introduce yourself with authority — not a CV recitation</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Most professional introductions do two things: list credentials and describe a job title. Neither of those things creates a memorable impression or establishes authority. A high-impact professional introduction does something different — it tells the other person what you bring to the situation they're in, not the situation you came from. Today you research what that looks like and rebuild your introduction from the ground up.</p>
+          <div class="task-box">
+            <div class="task-label">What Works — Phrases and Structure to Guide You</div>
+            <ul class="task-steps">
+              <li><strong>Weak intro pattern (what most people do):</strong> "I'm [Name], I'm a Senior Manager at [Company], I've been in the industry for 8 years and I work on product development." — This tells them your label, not your value.</li>
+              <li><strong>Strong intro pattern:</strong> Lead with what you solve or enable, then connect it to why that matters. "I work with [type of team] to help them [outcome] — specifically in situations where [context]. Right now I'm focused on [one current thing]."</li>
+              <li><strong>Example sentence openers:</strong> "What I do is help [type of people] do [thing] better — specifically by…" / "I work at the intersection of [X] and [Y], which means…" / "My job is essentially to make sure [outcome happens] — even when [challenge]." / "I'm the person [teams / clients / executives] come to when [specific problem]."</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Record your current professional introduction exactly as you give it — don't rehearse it, just give it cold. This is your before version.</li>
+              <li>Using the patterns above as a guide, rebuild your introduction so it leads with what you bring, not where you've been. 60 seconds maximum.</li>
+              <li>Record the revised version. Post both versions together.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Version 1 vs Version 2 — what category of intro was it before, and what does it do differently now</li>
+              <li>The opening sentence of your new intro — write it out exactly</li>
+              <li>What you cut and why it was the right thing to cut</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video ×2</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 2</span><span class="day-title">Disagree professionally — push back without damaging the relationship</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Disagreeing in a professional English-speaking context follows a specific register — direct enough to be taken seriously, measured enough to preserve the relationship, specific enough to be useful. Most non-native speakers either avoid the pushback entirely (and lose influence) or overcorrect into bluntness (and damage the relationship). Today you find the middle — using a real situation where you've disagreed or should have.</p>
+          <div class="task-box">
+            <div class="task-label">Phrases to Use — Pick 2–3 for Your Recording</div>
+            <ul class="task-steps">
+              <li><strong>Acknowledge before you push back (this is the key move):</strong> "I understand the reasoning behind this, and I want to flag something I think we need to consider." / "I can see why that approach makes sense — I do want to raise a concern about how it plays out in [specific context]."</li>
+              <li><strong>State the disagreement directly:</strong> "My view is different on this." / "I'd actually push back on that." / "I'm not fully aligned on [specific thing], and here's why." / "I see it differently — here's what I'm seeing."</li>
+              <li><strong>Be specific, not emotional:</strong> "The part I'd question is [X], because [specific reason]." / "Where I'd disagree is on [specific point] — the data suggests that [evidence]." / "The risk I see with that approach is [specific risk]."</li>
+              <li><strong>Keep the relationship intact:</strong> "I raise this because I think it matters for [shared goal], not to complicate things." / "I want to make sure we've thought this through before we commit."</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Think of a real situation where you disagreed with a decision or direction at work — and either said nothing or said it in a way that didn't land. Use that situation today.</li>
+              <li>Record yourself delivering the pushback using at least 2 phrases from the list above — direct, specific, non-defensive. 90 seconds.</li>
+              <li>Record a 60-second reflection on why you didn't say it this way at the time.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The situation — describe briefly without names</li>
+              <li>The specific phrases you used to push back — write at least one out</li>
+              <li>What stopped you from saying it this way in the real moment</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 3</span><span class="day-title">Give a status update that doesn't put people to sleep</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">The spoken status update is one of the most common and most poorly executed professional conversations. The default structure — starting from the beginning, working chronologically toward the present, then gesturing vaguely at next steps — makes the listener work too hard. A professional update leads with what matters most right now, provides only the context that supports that, and closes with a clear next action or decision point. Today you rebuild yours.</p>
+          <div class="task-box">
+            <div class="task-label">Structure + Phrases to Guide You</div>
+            <ul class="task-steps">
+              <li><strong>Lead with status, not history:</strong> Don't start from the beginning of the project. Start from now. "Where we are: [current status in one sentence]. What's driving that: [one key reason]. What happens next: [one clear action or decision]."</li>
+              <li><strong>Opening phrases that signal a professional update:</strong> "The current status is…" / "Where we stand right now is…" / "The headline is [X] — here's the context." / "We're on track / slightly behind / ahead on [X], and here's what that means."</li>
+              <li><strong>Transition to context without getting lost in it:</strong> "The relevant background is…" / "To give you just enough context…" / "This is because [one reason] — I won't go into the full history, but the key thing to know is…"</li>
+              <li><strong>Closing with a clear next step:</strong> "The decision we need from you is…" / "My recommendation for next steps is…" / "By [date], we'll have [deliverable]." / "The one thing I need from this conversation is…"</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Choose a real project you could be asked to update someone on. Record Version 1 as you normally give it — your default structure. Don't change anything.</li>
+              <li>Record Version 2 using the structure above — lead with status, add only the context that supports it, close with a clear next action. Same topic, same length (aim for 60–90 seconds).</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Version 1 vs Version 2 — what you led with each time</li>
+              <li>The phrase that helped you restructure — write the exact sentence</li>
+              <li>What a well-structured update gives the listener that your old version made them work for</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video ×2</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 4</span><span class="day-title">Make a professional ask — without over-explaining or apologizing for it</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Most professional asks fail not because of the substance but because of the delivery: over-qualified, over-explained, pre-emptively apologetic, or buried under context. In professional English-speaking environments, the convention is to make the ask directly and early — then provide the supporting rationale, not the other way around. Today you rebuild a real ask you've been avoiding or have made poorly.</p>
+          <div class="task-box">
+            <div class="task-label">Phrases to Use — Ask First, Rationale Second</div>
+            <ul class="task-steps">
+              <li><strong>What NOT to do (the buried ask):</strong> "So I know this isn't ideal timing and you're probably busy, and I completely understand if this isn't possible, but I was just wondering if maybe there's any chance we could think about…" — This signals low confidence before you've even made the ask.</li>
+              <li><strong>How to open directly:</strong> "I'd like to discuss [the ask] — here's my thinking." / "I want to make a case for [X]." / "I'm asking for [specific thing] — and I'd like to explain why now is the right time for this."</li>
+              <li><strong>Example asks by type:</strong> Resource: "I'd like to add one person to this team for the next two months — here's why that changes the outcome." / Timeline: "I want to propose pushing the deadline by two weeks — the tradeoff is worth it because…" / Compensation: "I'd like to talk about adjusting my compensation — I want to walk you through what I've built since we last discussed this."</li>
+              <li><strong>After the ask — rationale, not apology:</strong> "The reason I'm asking now is…" / "Here's what supports this…" / "This makes sense because…" — Keep it short. One or two reasons maximum.</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Name a real professional ask — a resource, a timeline change, a compensation conversation, a role change. Pick the real one, not a safe one.</li>
+              <li>Record the ask using the structure above: open with the ask, then give the rationale. 90 seconds. No apology in the opening. No context before the ask.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The ask — describe without identifying detail</li>
+              <li>Your opening sentence — the ask itself, stated directly</li>
+              <li>What you stopped doing that you used to think was necessary</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 5</span><span class="day-title">Influence without authority — get buy-in when you can't give orders</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Influencing peers and cross-functional stakeholders is one of the most professionally complex spoken tasks — you have no authority to use, only framing, shared interest, and the quality of your spoken logic. The most effective spoken influence in professional English environments works by connecting the idea to the other person's existing goals before introducing anything new. Today you practice this with a real pitch.</p>
+          <div class="task-box">
+            <div class="task-label">The Structure + Phrases to Use</div>
+            <ul class="task-steps">
+              <li><strong>Step 1 — Start with their goal, not your idea:</strong> "I know you're focused on [their priority]. I think there's something we could do that directly supports that." — This opens the door before you walk through it.</li>
+              <li><strong>Step 2 — Introduce the idea briefly:</strong> "What I'm proposing is [one sentence]." / "Here's what I'm thinking: [keep it simple]." / "The idea is straightforward — [one clear sentence]."</li>
+              <li><strong>Step 3 — Connect it to shared benefit:</strong> "The reason this works for both of us is…" / "This would help your team because [specific reason], and on our end it solves [specific thing]." / "The outcome I'm seeing here is [X] — which I think lines up with [their goal]."</li>
+              <li><strong>Step 4 — Make it easy to say yes:</strong> "I'm not asking for much — what I need from your side is [small, specific thing]." / "The first step would just be [easy action]." / "I'd love to hear your reaction before we go any further."</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Choose a real idea you want to sell to a colleague or team — something you genuinely want to happen.</li>
+              <li>Record Version 1 cold — how you'd normally pitch it. Then record Version 2 using the four-step structure above. Use at least 2 of the phrases from the list. Same idea, different approach.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Version 1 vs Version 2 — what was different about how you opened</li>
+              <li>The specific phrase or move that made the biggest difference</li>
+              <li>What you now understand about what actually gets buy-in</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video ×2</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 6</span><span class="day-title">Handle a difficult question — buy time with authority, not evasion</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">In professional English conversations, there's a specific register for buying time — phrases that signal you're processing, not avoiding. "That's an interesting angle — let me think through the implications" is different from "Um, I'm not sure, I'd need to check." Both are buying time. One sounds measured. One sounds unprepared. Your partner fires 3 difficult questions at you today and you practice the former.</p>
+          <div class="task-box">
+            <div class="task-label">Time-Buying Phrases That Sound Measured, Not Evasive</div>
+            <ul class="task-steps">
+              <li><strong>When you need a moment to think:</strong> "That's worth thinking through carefully — let me make sure I give you a useful answer." / "Good question — let me think about the most relevant angle here." / "There are a few ways to look at this — the one that matters most is probably…"</li>
+              <li><strong>When you don't have the full answer:</strong> "I don't have the full picture on that right now, but what I can say with confidence is…" / "I'd want to check one thing before I give you a definitive answer — what I know for certain is…" / "Let me be honest — I'm not certain about [X]. What I do know is [Y]."</li>
+              <li><strong>When you're redirecting:</strong> "The more useful question here might actually be…" / "What I think really drives this is…" / "The context that makes this make sense is…"</li>
+              <li><strong>When you need to close and move on:</strong> "The short answer is [X] — I'm happy to go deeper on that if it's helpful." / "My take on this is [X]. Happy to discuss further." / "I'll give you my best current thinking: [answer]."</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Your partner sends 3 unexpected, realistic work questions — ones where you wouldn't have the full answer ready. (Examples: "What's your take on why this initiative hasn't gained traction?" / "If you had to cut your team's budget by 20% right now, what would you protect?" / "How do you see your role evolving over the next 18 months?")</li>
+              <li>Record yourself responding to all 3 — using at least 2 phrases from the list above. You're not trying to be perfect. You're practicing sounding measured instead of caught off guard.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The hardest question — share it</li>
+              <li>The exact time-buying phrase you used</li>
+              <li>What the difference between sounding avoidant and sounding measured actually is — say it in your own words</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Partner Fires Questions</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 7</span><span class="day-title">Week 1 audit — which situation cost you the most confidence?</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Six situations in six days. One of them was significantly harder than the others — not necessarily the most complex, but the most exposing. Today you identify which one, say why, and share it with your partner before your live session. The live session starts with each person answering the same difficult question cold, in real time, in front of the other person.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Record a 2-minute spoken audit: which of the 6 situations was most exposing, which language gap did you not know you had until you had to speak it, and what you're focusing on in Week 2.</li>
+              <li>Share with your partner. In your live session: each person answers the question "Tell me something you've changed your mind about professionally in the last year" — cold, no prep, in real time. Debrief: what language patterns showed up under real-time pressure with another person watching?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The situation that cost you the most confidence this week and what it revealed</li>
+              <li>The phrase from this week you're keeping — write it out</li>
+              <li>Your Week 2 plan: which situation, what language, what the real context is</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Live Partner Session</span></div>
+        </div>
+      </div>
+
+      <div class="wk-eyebrow">Week 2 — Into Real Situations</div>
+      <div class="wk-title">Days 8–14: Real stakes, real language, real debrief</div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 8</span><span class="day-title">Take one Week 1 situation into a real professional conversation</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Pick one situation from Week 1 — the one you want to test in real life — and deliberately use it this week. You don't have to announce what you're doing. Just use the language. Debrief on video the same day.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Name which Week 1 situation you're bringing into real life and what specific language or structure you're testing.</li>
+              <li>After the real conversation, record an immediate debrief: what language held from Week 1, what reverted under real-time pressure, and whether the other person's response was any different.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Which Week 1 situation you brought into real life and what specific language you tested</li>
+              <li>What held vs. what reverted under real-time pressure</li>
+              <li>Whether the other person responded any differently than usual</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Debrief Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 9</span><span class="day-title">Rapid business scenarios — partner sets context, you respond cold</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Your partner describes 4 realistic professional scenarios — one at a time, right before you respond. You have 10 seconds to start and 90 seconds to respond to each. No prep. No preview. This tests how much of Week 1's language has become automatic vs. how much is still deliberate and fragile under pressure.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Partner prepares 4 scenarios in advance. (Examples: "A senior client has just told you their expectations weren't met. Respond." / "Your manager asks you to justify a decision your team made that went wrong." / "A colleague is pushing back on a timeline you've committed to. Handle it." / "You're asked to present your team's Q3 performance in 90 seconds — go.")</li>
+              <li>Record all 4 rounds in one take. Debrief immediately.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The scenario that activated you most and what your language did under that pressure</li>
+              <li>The moment you sounded most professionally fluent — which scenario, what you said</li>
+              <li>One specific answer you'd revise and how you'd change it</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Partner Scenarios</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 10</span><span class="day-title">Deliver difficult news — honest, direct, without over-apologizing</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Delivering difficult news in professional English has a specific register — direct enough to be taken seriously, considerate enough to preserve the relationship, clear enough that the message isn't buried in softeners. Many non-native speakers either avoid the directness (and the message gets lost) or miss the consideration (and the relationship is damaged). Today you find the balance using a real situation.</p>
+          <div class="task-box">
+            <div class="task-label">Structure + Phrases to Guide You</div>
+            <ul class="task-steps">
+              <li><strong>Lead with the news, not the apology:</strong> Don't open with "I'm so sorry to have to tell you this…" — that centers your discomfort, not the information. Open with the news: "I want to be upfront with you about something." / "I have an update that's not what we were hoping for." / "I need to share something that affects [X]."</li>
+              <li><strong>State the news clearly:</strong> "The timeline has shifted — we won't be able to deliver by [date]." / "We've identified a problem that changes [X]." / "The decision has been made to [X], which I know isn't the outcome you were expecting."</li>
+              <li><strong>Give the reason — briefly:</strong> "This happened because [one clear reason]." / "The main factor here was [X]." — Don't over-explain. One reason is enough.</li>
+              <li><strong>Say what happens next:</strong> "Here's what we're doing about it…" / "The next step is…" / "What I'm proposing to address this is…" — This is what turns difficult news into a professional conversation instead of a confession.</li>
+              <li><strong>What to avoid:</strong> Don't say "mistakes were made" — own it. Don't over-apologize. Don't bury the news under 3 paragraphs of context. Don't end without a next step.</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Think of a real situation where you've had to (or should have) delivered difficult news — a project delay, a performance issue, a decision reversal, a missed expectation.</li>
+              <li>Record Version 1 as you would naturally say it — don't change anything. This is your before.</li>
+              <li>Record Version 2 using the structure and phrases above. Lead with the news. Be brief on the reason. End with a next step. Post both.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>Version 1 vs Version 2 — how each opened and what was different</li>
+              <li>The phrase that made the biggest difference — write it out exactly</li>
+              <li>What being direct without being harsh actually sounds like — say it in your own words</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video ×2</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 11</span><span class="day-title">Professional small talk — not weather chat, real relationship-building</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">In English-speaking professional cultures, small talk before a meeting is not filler — it's relationship infrastructure. How you handle the 2 minutes before the meeting starts tells people whether you're easy to work with, whether you're curious about them, and whether you can hold a natural conversation. Most non-native speakers either skip it (because it feels frivolous) or default to weather, which signals discomfort. Today you learn what it actually sounds like and practice it.</p>
+          <div class="task-box">
+            <div class="task-label">What Professional Small Talk Actually Sounds Like</div>
+            <ul class="task-steps">
+              <li><strong>Topics that work:</strong> Anything recent and low-stakes — a trip they mentioned, a project milestone, something in the news that relates to their work, the city they're calling from, something they posted or shared. The key is that it shows you've paid attention to them as a person.</li>
+              <li><strong>Opening lines that feel natural (not scripted):</strong> "How's the week going so far?" / "Did you manage to get a break over the weekend?" / "I saw you were at [conference/event] — how was it?" / "How's the team holding up with [project/deadline]?" / "I've been meaning to ask — how did [X] go?"</li>
+              <li><strong>How to show genuine curiosity:</strong> Follow up on what they say. "Oh, interesting — what made you decide to do it that way?" / "That sounds like a lot. Is the pressure letting up at all?" / "I'd be curious to hear more about that." — One follow-up question is enough. Don't interview them.</li>
+              <li><strong>How to transition into the meeting cleanly:</strong> "Anyway — let's get into it. I know you've got [other things]." / "Good to catch up — should we jump in?" / "Right, well — here's what I wanted to cover today." — A clean transition signals confidence.</li>
+              <li><strong>Topics to avoid:</strong> Salary, illness, politics (unless they raised it), religion, anything that puts them in a defensive position.</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Record a 2-minute simulation of the 2 minutes before a meeting with an important professional contact — using natural, relationship-building small talk that leads into the agenda. Use at least 2 phrases from the list above.</li>
+              <li>Record a 60-second reflection on what felt unnatural or culturally foreign about this — where did it feel forced, and where did it feel okay?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The opener you used — write the exact line</li>
+              <li>What felt uncomfortable or culturally foreign and why</li>
+              <li>The one line you'll actually use from now</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 12</span><span class="day-title">Hold the floor — present your view in a group without trailing off</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Holding the floor in a group conversation — making sure your point lands before you invite response — requires specific spoken behaviors: not inviting interruption mid-thought, not trailing off at the end of a sentence, not ending with "Does that make sense?" Your partner will try to redirect you mid-delivery today. Your job is to hold or conclude cleanly.</p>
+          <div class="task-box">
+            <div class="task-label">Language That Holds the Floor vs. Language That Gives It Away</div>
+            <ul class="task-steps">
+              <li><strong>Phrases that signal you're not done yet:</strong> "Let me finish this thought…" / "I want to get to the main point before we discuss…" / "Hold on — I want to make sure this lands before we move on." / "Just one more thing on this…" — Say these calmly, not defensively. Volume and pace matter more than the words.</li>
+              <li><strong>How to close before you open to response:</strong> Don't trail off into "…so, yeah." End with something definitive: "That's the situation." / "That's my position on this." / "So my recommendation is [X]." / "I wanted to make sure that was clear before we discuss." — A clean ending is what holds authority.</li>
+              <li><strong>What gives the floor away (avoid these):</strong> "Does that make sense?" (invites interruption) / "I don't know if that's right, but…" (signals uncertainty) / Rising intonation at the end of statements (makes statements sound like questions) / Trailing off mid-thought without a landing point.</li>
+              <li><strong>If they interrupt anyway:</strong> "I'll come back to that — let me finish this first." / "Good point — I want to finish this thought and then address that." — Don't just stop. You're allowed to keep your floor.</li>
+            </ul>
+          </div>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Record yourself presenting a professional opinion on a real business topic — 90 seconds, as if in a team meeting. Your partner watches live and tries to interject once, naturally.</li>
+              <li>Your goal: either hold the floor until you've finished your point using language from the list above, or close cleanly before opening to response. Trailing off is not an option.</li>
+              <li>Debrief with your partner immediately: what language held the floor, and what invited the interruption?</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>When your partner interjected and exactly what you did — name the language you used</li>
+              <li>The phrase that helped you hold the floor</li>
+              <li>What holding the floor requires beyond the words — what your body or energy needs to do</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Partner Interjects</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 13</span><span class="day-title">Full professional scenario — start to finish, 5 minutes, no script</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Your partner plays a senior stakeholder. You run a full professional interaction — 5 minutes: a warm professional opening, a clear status update, one moment of pushback from your partner that you handle, one question you don't fully know the answer to, and a clean professional close. No script. Record the full interaction. This is the closest simulation to a real high-stakes professional conversation in this challenge.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Run the scenario live with your partner. The stakeholder should be realistic — not hostile, not easy. They ask one difficult question and challenge one thing you say.</li>
+              <li>Record the full 5 minutes. Debrief immediately after: what language held, what fell apart, and the moment you felt most and least like a professional.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>What language or structure held across the full 5 minutes</li>
+              <li>The moment you sounded most like the professional you are — describe it</li>
+              <li>Your partner's one key observation</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bp">🤝 Live Partner Session</span></div>
+        </div>
+      </div>
+
+      <div class="day" onclick="tog(this)">
+        <div class="day-top"><span class="day-num">Day 14</span><span class="day-title">The transformation video — same intro, different person</span><span class="day-icon">+</span></div>
+        <div class="day-body">
+          <p class="setup">Post your Day 1 introduction alongside your Day 13 full scenario. Record a 2-minute honest reflection — not "I improved" but specifically: which professional situations you can now handle that you were avoiding before, what language specifically changed, and what is still in progress. This is your community post.</p>
+          <div class="task-box"><div class="task-label">Your Task</div>
+            <ul class="task-steps">
+              <li>Record a new version of your professional introduction — 60 seconds — as who you are now at Day 14.</li>
+              <li>Post Day 1 intro, Day 14 intro, and your reflection video to the community feed.</li>
+            </ul>
+          </div>
+          <div class="post-note">
+            <div class="post-note-label">📲 Post This to the Community Feed</div>
+            <p class="post-note-text">Your task video is your post. At the top of your post, write a line or two on:</p>
+            <ul class="post-note-cues">
+              <li>The professional situation you can now handle that you were avoiding before</li>
+              <li>The phrase or approach that changed everything — write it out</li>
+              <li>What these 14 days revealed about where you actually are — not where you thought you were</li>
+            </ul>
+          </div>
+          <div class="badges"><span class="badge bv">📹 Video</span><span class="badge bl">🌍 Community Post</span></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="partner-sessions">
+      <h3>🤝 Two Live Partner Sessions</h3>
+      <div class="sess-grid">
+        <div class="sess"><h4>Session 1 — Day 7</h4><p>Each person answers one difficult question cold, in real time, in front of the other. "Tell me something you've changed your mind about professionally in the last year." Debrief: what language patterns showed up under live pressure that don't appear in recorded videos? What specific phrase or behavior did you notice in the other person that they might not be aware of?</p></div>
+        <div class="sess"><h4>Session 2 — Day 13</h4><p>Run the full 5-minute professional scenario live. Stakeholder should make it realistic and challenging — follow-up questions, one challenge, one moment of genuine ambiguity. After: one specific language win and one specific language gap per person. Be precise — not "you seemed confident" but "when you handled the pushback you said [X] and it worked because [reason]."</p></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function tog(card) {
+  card.classList.toggle('open');
+}
+</script>
+</body>
+</html>
