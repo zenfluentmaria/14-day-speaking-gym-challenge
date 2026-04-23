@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Speaking Characters Quiz — IBS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --plum:#1E1B2E;--terra:#C8593A;--purple:#7C6BC4;--parchment:#FAF6F1;
+  --lavender:#D7C4F0;--peach:#F5CBA7;--mint:#ADE8D4;--sky:#A8D4F5;
+  --butter:#F5ECA8;--rose:#D4A0C0;--mid:#9B8EC4;--bg:#F7F2E8;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--plum);min-height:100vh;padding:0;}
+
+/* PAPER TEXTURE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
+
+.container{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:48px 24px 80px;}
+
+/* HEADER */
+.quiz-header{text-align:center;margin-bottom:56px;}
+.quiz-header .eyebrow{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--terra);margin-bottom:16px;}
+.quiz-header h1{font-family:'Playfair Display',serif;font-size:36px;font-weight:600;line-height:1.2;color:var(--plum);margin-bottom:16px;}
+.quiz-header h1 em{font-style:italic;color:var(--terra);}
+.quiz-header p{font-size:15px;color:#555;line-height:1.7;max-width:520px;margin:0 auto;}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:40px;}
+.progress-bar{height:3px;background:#E8E0D4;border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--terra);border-radius:2px;transition:width 0.4s ease;}
+.progress-label{font-size:12px;color:var(--mid);margin-top:8px;text-align:right;}
+
+/* QUESTION CARD */
+.question-card{background:white;border-radius:20px;padding:40px;box-shadow:0 2px 24px rgba(0,0,0,0.06);margin-bottom:24px;animation:slideIn 0.35s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+.q-num{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:16px;}
+.q-text{font-family:'Playfair Display',serif;font-size:20px;line-height:1.5;color:var(--plum);margin-bottom:32px;}
+
+.options{display:grid;gap:10px;}
+.option{background:var(--bg);border:2px solid transparent;border-radius:12px;padding:16px 20px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;color:var(--plum);text-align:left;transition:all 0.2s;display:flex;align-items:flex-start;gap:12px;}
+.option:hover{border-color:var(--purple);background:white;}
+.option.selected{border-color:var(--terra);background:#FFF5F2;}
+.option-letter{width:24px;height:24px;border-radius:50%;background:var(--lavender);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--plum);flex-shrink:0;margin-top:1px;}
+.option.selected .option-letter{background:var(--terra);color:white;}
+
+.btn-next{width:100%;padding:16px;background:var(--plum);color:white;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.2s;margin-top:8px;}
+.btn-next:hover{background:var(--terra);}
+.btn-next:disabled{opacity:0.3;cursor:not-allowed;}
+
+/* RESULTS */
+.results{display:none;animation:slideIn 0.4s ease;}
+.character-reveal{background:var(--plum);border-radius:24px;padding:48px 40px;text-align:center;margin-bottom:32px;position:relative;overflow:hidden;}
+.character-reveal::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.04);}
+.character-reveal::after{content:'';position:absolute;bottom:-40px;left:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.03);}
+.character-emoji{font-size:64px;margin-bottom:16px;display:block;}
+.character-label{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--peach);margin-bottom:12px;}
+.character-name{font-family:'Playfair Display',serif;font-size:32px;color:white;margin-bottom:8px;}
+.character-subtitle{font-size:15px;color:rgba(255,255,255,0.65);font-style:italic;}
+
+.character-body{background:white;border-radius:20px;padding:36px;margin-bottom:20px;}
+.character-body h3{font-family:'Playfair Display',serif;font-size:18px;color:var(--plum);margin-bottom:12px;}
+.character-body p{font-size:14px;line-height:1.75;color:#444;margin-bottom:20px;}
+.character-body p:last-child{margin-bottom:0;}
+
+.traits-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0;}
+.trait-card{background:var(--bg);border-radius:12px;padding:16px;}
+.trait-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:6px;}
+.trait-text{font-size:13px;line-height:1.5;color:var(--plum);}
+
+.challenge-box{background:linear-gradient(135deg,#FFF5F2,#F7F2E8);border:1px solid #F5CBA7;border-radius:14px;padding:24px;margin-top:20px;}
+.challenge-box h4{font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--terra);margin-bottom:10px;}
+.challenge-box p{font-size:14px;line-height:1.6;color:var(--plum);}
+
+.score-breakdown{background:white;border-radius:20px;padding:32px;margin-bottom:20px;}
+.score-breakdown h3{font-family:'Playfair Display',serif;font-size:16px;color:var(--plum);margin-bottom:20px;}
+.score-bar-wrap{margin-bottom:14px;}
+.score-bar-label{display:flex;justify-content:space-between;font-size:13px;color:#555;margin-bottom:6px;}
+.score-bar{height:6px;background:#EEE;border-radius:3px;overflow:hidden;}
+.score-bar-fill{height:100%;border-radius:3px;transition:width 0.8s ease;}
+
+.btn-retry{width:100%;padding:14px;background:transparent;color:var(--plum);border:2px solid var(--plum);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;margin-top:8px;}
+.btn-retry:hover{background:var(--plum);color:white;}
+
+@media(max-width:600px){
+  .question-card{padding:28px 20px;}
+  .character-reveal{padding:36px 24px;}
+  .traits-grid{grid-template-columns:1fr;}
+  .quiz-header h1{font-size:28px;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="quiz-header">
+    <div class="eyebrow">Identity Based Speaking</div>
+    <h1>Who Are You When<br>You <em>Have</em> to Speak?</h1>
+    <p>This quiz reveals your Speaking Character — the identity that activates under professional pressure. 12 questions. No right answers. Just honest ones.</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">Question 1 of 12</div>
+  </div>
+
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+      <div class="q-num" id="qNum">01 / 12</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsArea"></div>
+      <button class="btn-next" id="btnNext" onclick="nextQuestion()" disabled>Next →</button>
+    </div>
+  </div>
+
+  <div class="results" id="results"></div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    text: "You're in a meeting and your manager unexpectedly asks you to explain your project to a senior leader you've never met. Your first internal reaction is:",
+    options: [
+      {text:"A rush of heat — you start talking immediately to fill the silence, even before you've thought it through.", char:"O"},
+      {text:"You freeze for a second, then start with 'So, um, basically…' and hope it comes together.", char:"S"},
+      {text:"You feel calm on the outside but your brain is racing to find the perfect opening before a single word leaves your mouth.", char:"P"},
+      {text:"You feel your voice physically shrink — you give a short, safe answer and hope no one asks a follow-up.", char:"H"},
+    ]
+  },
+  {
+    text: "Someone interrupts you mid-sentence in a presentation. What do you most commonly do?",
+    options: [
+      {text:"You lose your thread completely and let them take over — then mentally replay the moment for hours afterward.", char:"S"},
+      {text:"You stop, accommodate the interruption, and forget what you were about to say.", char:"H"},
+      {text:"You get flustered but push through, talking faster to get back to your point.", char:"O"},
+      {text:"You pause, tell yourself to think, but the pause stretches too long and it becomes awkward.", char:"P"},
+    ]
+  },
+  {
+    text: "You're asked a question at work that you don't know the full answer to. What do you do?",
+    options: [
+      {text:"You say a lot — hoping something you say sounds right and covers the gap.", char:"O"},
+      {text:"You say 'That's a great question' and then give a vague, non-committal answer.", char:"H"},
+      {text:"You say 'Let me check on that' — even when you actually have a reasonable answer and could just say it.", char:"P"},
+      {text:"You start answering, realize mid-sentence you're not sure, and trail off into 'Does that make sense?'", char:"S"},
+    ]
+  },
+  {
+    text: "Think about the last time you had to introduce yourself professionally to a room of people you didn't know. Which is most true?",
+    options: [
+      {text:"You over-explained your background, added context no one asked for, and finished feeling like you said too much.", char:"O"},
+      {text:"You gave a short, polite, forgettable version of yourself — and felt relieved when it was over.", char:"H"},
+      {text:"You rehearsed the intro beforehand but it still didn't sound like you when you said it out loud.", char:"P"},
+      {text:"You gave the intro but something about your voice or energy felt disconnected — like you were reading from a script inside your head.", char:"S"},
+    ]
+  },
+  {
+    text: "You're explaining a complex idea to a stakeholder and you can see from their face that they're not following. You:",
+    options: [
+      {text:"Add more detail, more examples, more context — and somehow make it more confusing.", char:"O"},
+      {text:"Apologize and start over from the beginning, feeling like you failed.", char:"S"},
+      {text:"Pause and ask 'Does that make sense?' but then feel anxious waiting for their answer.", char:"H"},
+      {text:"Stop, internally re-plan the whole explanation, then deliver a more precise version — but it takes so long to recalibrate that you've lost the moment.", char:"P"},
+    ]
+  },
+  {
+    text: "When you speak in your native language vs. English in professional settings, the difference is:",
+    options: [
+      {text:"In my native language I'm sharp, structured, and convincing. In English I feel like a different, smaller person.", char:"H"},
+      {text:"In my native language I say what I mean. In English I say something close to what I mean and hope it lands.", char:"S"},
+      {text:"In both I tend to over-explain — but in English I can't tell if people aren't following or are just being polite.", char:"O"},
+      {text:"In my native language I speak freely. In English I pre-screen every sentence before it leaves my mouth.", char:"P"},
+    ]
+  },
+  {
+    text: "You've just come out of a meeting where you said something you think was misunderstood. What happens next?",
+    options: [
+      {text:"You replay it on loop. You think about what you should have said. You draft a follow-up message to correct it. You're still thinking about it tomorrow.", char:"P"},
+      {text:"You feel bad about it but don't do anything. You tell yourself it probably didn't matter.", char:"H"},
+      {text:"You immediately message someone to clarify — sometimes before they've even had time to form an impression.", char:"O"},
+      {text:"You feel a dull sense of having underperformed, but you can't quite identify the specific moment it went wrong.", char:"S"},
+    ]
+  },
+  {
+    text: "Someone challenges your idea directly in a meeting. Your gut response is:",
+    options: [
+      {text:"To immediately defend it — sometimes before fully hearing the challenge.", char:"O"},
+      {text:"To cave faster than you'd like — you agree or soften your position even when you don't actually agree.", char:"H"},
+      {text:"To go quiet, process the challenge thoroughly, and respond later — after the moment has passed.", char:"P"},
+      {text:"To feel a drop in confidence that shows in your voice, even if your argument is actually solid.", char:"S"},
+    ]
+  },
+  {
+    text: "When you have a high-stakes presentation coming up, the week before looks like:",
+    options: [
+      {text:"You prepare obsessively — you know the content cold — but on the day your delivery still doesn't match your preparation.", char:"P"},
+      {text:"You prepare, but you're mostly trying to manage the anxiety, not build the talk.", char:"S"},
+      {text:"You wing it more than you'd admit — because over-preparing makes you feel more robotic.", char:"O"},
+      {text:"You tell yourself you'll prepare and then procrastinate until the last possible moment, because starting feels like confirming the fear.", char:"H"},
+    ]
+  },
+  {
+    text: "The feedback you most often receive about your speaking (or secretly suspect is true) is:",
+    options: [
+      {text:"'You're hard to follow sometimes' or 'You give a lot of detail.'", char:"O"},
+      {text:"'You need to be more confident' or 'You undersell yourself.'", char:"H"},
+      {text:"'You're very thorough' — which you know is a polite way of saying you took too long to get to the point.", char:"P"},
+      {text:"'I can't quite tell what you're trying to say' — your message lands differently than you intended it.", char:"S"},
+    ]
+  },
+  {
+    text: "Silence in a conversation — someone pauses and looks at you expectantly — makes you:",
+    options: [
+      {text:"Fill it. Immediately. With whatever comes out first.", char:"O"},
+      {text:"Feel like you've done something wrong. You apologize internally even though nothing has happened.", char:"H"},
+      {text:"Want to respond perfectly — so you stay silent so long that the other person fills it for you.", char:"P"},
+      {text:"Disconnect slightly from what you actually think and say something safe instead.", char:"S"},
+    ]
+  },
+  {
+    text: "What would the truest version of your professional speaking fear sound like, if you said it out loud?",
+    options: [
+      {text:"'I'm afraid they'll think I don't know what I'm talking about — so I keep talking until I feel like they do.'", char:"O"},
+      {text:"'I'm afraid that if I really show up and speak fully, something will go wrong and I'll be exposed.'", char:"H"},
+      {text:"'I'm afraid of saying the wrong thing, so I try to say the right thing so precisely that I end up saying nothing.'", char:"P"},
+      {text:"'I'm afraid the gap between how I think and how I sound is visible to everyone — and that gap defines how they see me.'", char:"S"},
+    ]
+  }
+];
+
+const characters = {
+  O: {
+    emoji:"🌊",
+    name:"The Overcorrector",
+    subtitle:"Speaks to manage anxiety, not to communicate",
+    color:"#E8845C",
+    desc1:"You are sharp, knowledgeable, and genuinely good at your work. The problem is that under pressure, your speaking becomes a nervous system response rather than a communication act. You talk to fill space, to manage how you're perceived, to prove competence before it can be questioned. The result: you often say more than you need to, add detail that dilutes rather than supports your point, and finish speaking before you've actually landed anything.",
+    desc2:"This isn't a content problem. You have plenty of content. It's a regulation problem — your nervous system has learned that talking equals safety. Until that pattern is interrupted, more preparation won't fix it. More language won't fix it. What changes things is learning to pause before the urge to speak, and speaking from choice rather than from fear.",
+    trait1:{label:"Your pattern activates when",text:"There's ambiguity about how you're being received — silence, a neutral face, a complex question."},
+    trait2:{label:"Your escape behavior",text:"Over-explanation, adding examples after the point is already made, repeating yourself in different words."},
+    trait3:{label:"What others experience",text:"They sense your competence but feel slightly overwhelmed. They're not sure what the main point was."},
+    trait4:{label:"Your hidden strength",text:"You're thorough, warm, and deeply knowledgeable. Structure gives all of that a container."},
+    challenge:"Your 14-day work: Learn to say one thing completely rather than many things partially. The CEO Framework will feel like a straitjacket at first. That's the point. The constraint is the practice."
+  },
+  S: {
+    emoji:"🌫",
+    name:"The Blurred One",
+    subtitle:"The gap between thinking and speaking is visible — and felt",
+    color:"#9B8EC4",
+    desc1:"You think in full, coherent sentences. You know exactly what you mean. But by the time the thought travels from your mind to your mouth, something shifts — it arrives translated, softened, or slightly off. You're not struggling with ideas. You're struggling with the transmission. The gap between your inner clarity and your outer expression is the source of the pattern, and you can feel it in real time when it happens.",
+    desc2:"What drives this pattern is usually an identity split: there's the version of you that thinks clearly in your native language or in low-stakes settings, and the version that shows up when English + pressure + visibility converge. Your nervous system reads that combination as threat, and your speech becomes the symptom. The fix is not more English practice. It's learning to bring the first version of yourself into the conditions that currently trigger the second.",
+    trait1:{label:"Your pattern activates when",text:"Visibility is high — new people, senior people, moments when you sense you're being evaluated."},
+    trait2:{label:"Your escape behavior",text:"Trailing off, saying 'Does that make sense?', speaking in half-finished thoughts that the other person fills in."},
+    trait3:{label:"What others experience",text:"They like you and sense your intelligence, but they can't always tell what you're actually saying."},
+    trait4:{label:"Your hidden strength",text:"You're genuinely thoughtful and perceptive. When you do land a clear sentence, it's memorable."},
+    challenge:"Your 14-day work: Finish every sentence before you assess how it's landing. Complete the thought. Own the ending. The blurring happens at the end of sentences — that's where your practice lives."
+  },
+  P: {
+    emoji:"🔬",
+    name:"The Perfectionist in Pause",
+    subtitle:"Waiting for the right words costs you the right moment",
+    color:"#7C6BC4",
+    desc1:"You are probably the most prepared person in many of the rooms you enter. You've thought about this, researched it, and could speak on it at length — in the right conditions. The problem is that 'the right conditions' require a level of readiness that real professional life rarely provides. When a moment calls for a fast, confident, imperfect response, you pause. You recalibrate. You search for the precise formulation. And by the time you've found it, the moment has passed or someone else has filled it.",
+    desc2:"This pattern is often misread as a lack of confidence, which is not quite right. It's closer to an identity belief: that speaking imprecisely means being imprecise — that what you say is who you are. So you protect the quality of your output by managing the risk of your delivery. The cost is spontaneity, presence, and the authority that comes from occupying a moment fully rather than arriving at it perfectly but late.",
+    trait1:{label:"Your pattern activates when",text:"The question is unexpected, the stakes are high, or the answer requires real-time reasoning under visibility."},
+    trait2:{label:"Your escape behavior",text:"Long pauses, 'Let me think about that,' over-qualifying ('it depends,' 'in some contexts'), deferring to follow up later."},
+    trait3:{label:"What others experience",text:"They respect your precision but sometimes wish you'd just say it. They may read your pauses as uncertainty."},
+    trait4:{label:"Your hidden strength",text:"When you do speak, it's considered and accurate. Your credibility is real — you just need to let people access it faster."},
+    challenge:"Your 14-day work: Say the imperfect version in the right moment. The Rapid Interview Rounds are designed specifically to break this pattern — 90 seconds, no prep, no re-recording. The goal is not a perfect answer. The goal is a present one."
+  },
+  H: {
+    emoji:"🪞",
+    name:"The Hidden One",
+    subtitle:"Makes themselves smaller so there is less to judge",
+    color:"#D4A0C0",
+    desc1:"You are capable of far more than you show in professional settings. The performance gap — between what you can do and what you demonstrate when it counts — is significant. And you know it. You've felt the frustration of walking out of a meeting having said a fraction of what you actually think, watching someone else say a version of your idea and get credit for it. The pattern is not about language. It's about what your identity believes is safe to show.",
+    desc2:"What drives the hiding is usually a fear of exposure — not failure in the abstract, but a specific belief that if you fully show up and something goes wrong, the consequences are worse than the consequences of not showing up at all. This makes sense as a protection mechanism. It was probably adaptive at some point. But it is now costing you visibility, influence, and the professional trajectory you're actually capable of. The work is not about forcing yourself to speak. It's about understanding what the hiding has been protecting you from — and deciding whether that trade-off still makes sense.",
+    trait1:{label:"Your pattern activates when",text:"Authority figures are present, the situation is unfamiliar, or you're the 'only one' in some way in the room."},
+    trait2:{label:"Your escape behavior",text:"Short safe answers, agreeing instead of asserting, waiting to speak last or not at all, over-qualifying your own ideas."},
+    trait3:{label:"What others experience",text:"They may not see you at all — or they sense there's more there and wonder why you hold it back."},
+    trait4:{label:"Your hidden strength",text:"When you do speak, people listen — because you've built credibility by not talking for the sake of it. The problem is frequency, not quality."},
+    challenge:"Your 14-day work: Decide to take up space before you feel ready to. Pre-Frame + CEO gives you structure to enter a conversation rather than wait to be invited into one. The invitation rarely comes the way you want it to."
+  }
+};
+
+let answers = {O:0,S:0,P:0,H:0};
+let current = 0;
+let selected = null;
+
+function render(){
+  if(current >= questions.length){showResults();return;}
+  const q = questions[current];
+  document.getElementById('qNum').textContent = String(current+1).padStart(2,'0') + ' / ' + questions.length;
+  document.getElementById('qText').textContent = q.text;
+  const opts = document.getElementById('optionsArea');
+  opts.innerHTML = '';
+  q.options.forEach((o,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.innerHTML = `<span class="option-letter">${String.fromCharCode(65+i)}</span><span>${o.text}</span>`;
+    btn.onclick = ()=>selectOption(btn,o.char);
+    opts.appendChild(btn);
+  });
+  document.getElementById('btnNext').disabled = true;
+  selected = null;
+  document.getElementById('progressFill').style.width = (current/questions.length*100)+'%';
+  document.getElementById('progressLabel').textContent = `Question ${current+1} of ${questions.length}`;
+  document.getElementById('questionCard').style.animation = 'none';
+  void document.getElementById('questionCard').offsetWidth;
+  document.getElementById('questionCard').style.animation = '';
+}
+
+function selectOption(btn,char){
+  document.querySelectorAll('.option').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selected = char;
+  document.getElementById('btnNext').disabled = false;
+}
+
+function nextQuestion(){
+  if(!selected) return;
+  answers[selected]++;
+  current++;
+  render();
+}
+
+function showResults(){
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressLabel').textContent = 'Complete';
+  const top = Object.entries(answers).sort((a,b)=>b[1]-a[1])[0][0];
+  const c = characters[top];
+  const res = document.getElementById('results');
+  res.style.display = 'block';
+
+  const barColors = {O:'#E8845C',S:'#9B8EC4',P:'#7C6BC4',H:'#D4A0C0'};
+  const charNames = {O:'The Overcorrector',S:'The Blurred One',P:'The Perfectionist in Pause',H:'The Hidden One'};
+  const totalQ = questions.length;
+  const barsHtml = Object.entries(answers).map(([k,v])=>`
+    <div class="score-bar-wrap">
+      <div class="score-bar-label"><span>${charNames[k]}</span><span>${Math.round(v/totalQ*100)}%</span></div>
+      <div class="score-bar"><div class="score-bar-fill" style="width:${v/totalQ*100}%;background:${barColors[k]};"></div></div>
+    </div>
+  `).join('');
+
+  res.innerHTML = `
+    <div class="character-reveal">
+      <span class="character-emoji">${c.emoji}</span>
+      <div class="character-label">Your Speaking Character</div>
+      <div class="character-name">${c.name}</div>
+      <div class="character-subtitle">${c.subtitle}</div>
+    </div>
+    <div class="character-body">
+      <h3>What this pattern looks like in real life</h3>
+      <p>${c.desc1}</p>
+      <p>${c.desc2}</p>
+      <div class="traits-grid">
+        <div class="trait-card"><div class="trait-label">${c.trait1.label}</div><div class="trait-text">${c.trait1.text}</div></div>
+        <div class="trait-card"><div class="trait-label">${c.trait2.label}</div><div class="trait-text">${c.trait2.text}</div></div>
+        <div class="trait-card"><div class="trait-label">${c.trait3.label}</div><div class="trait-text">${c.trait3.text}</div></div>
+        <div class="trait-card"><div class="trait-label">${c.trait4.label}</div><div class="trait-text">${c.trait4.text}</div></div>
+      </div>
+      <div class="challenge-box">
+        <h4>Your 14-Day Focus</h4>
+        <p>${c.challenge}</p>
+      </div>
+    </div>
+    <div class="score-breakdown">
+      <h3>Your full character breakdown</h3>
+      ${barsHtml}
+    </div>
+    <button class="btn-retry" onclick="retake()">↺ Retake the quiz</button>
+  `;
+}
+
+function retake(){
+  answers={O:0,S:0,P:0,H:0};current=0;selected=null;
+  document.getElementById('quizArea').style.display='block';
+  document.getElementById('results').style.display='none';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
